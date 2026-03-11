@@ -1,6 +1,7 @@
 package com.chatapp.baseClasses;
 import java.time.Instant; // for times
 import java.util.Scanner; // for user inputs
+import java.util.UUID;
 import java.io.*; // for files
 
 public class Message {
@@ -12,7 +13,13 @@ public class Message {
     private Instant timeSent;
     private Instant timeRecieved; // this must be set later in development as it is not yet possible to send messages
     private File messageAttachment; // could be an image or any other file, images will be displayed differently from other file types in a possible GUI
+    private UUID userUUID;
+    
+    
 
+    public UUID getuserUUID() {
+        return userUUID;
+    }
 
     public Message(){
         text = "Message has failed to load correctly and/or was only set in the constructor.";
