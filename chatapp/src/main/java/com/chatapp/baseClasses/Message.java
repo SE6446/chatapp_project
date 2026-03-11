@@ -1,17 +1,25 @@
 package com.chatapp.baseClasses;
-import java.time.Instant;
-import java.util.Scanner;
+import java.time.Instant; // for times
+import java.util.Scanner; // for user inputs
+import java.io.*; // for files
 
 public class Message {
     Scanner s = new Scanner(System.in);
     public boolean sentByCurrentUser; // this can be used to decide which side of the screen chats appear on or to attribute it to the correct user 
+    public String senderName; // not yet possible to set;
     public String text;
     public Instant timeSent;
+    public Instant timeRecieved; // this must be set later in development as it is not yet possible to send messages
+    public boolean readByOtherUser; // this must be set later in development as it is not yet possible to send messages
+    public File messageAttachment; // could be an image or any other file, images will be displayed differently from other file types
 
 
     public Message(){
         text = "Message has failed to load correctly and was only set in the constructor.";
         timeSent = Instant.now();
+        readByOtherUser = false;
+        senderName = "Placeholder"; // This can be set once profiles have been created and the current user can be seen.
+        
     }
 
     public Message(String textInput){
@@ -50,17 +58,4 @@ public class Message {
 
         text = userInput;
     }
-
-    // Debugging methods below:
-
-    private void display(){
-        System.out.println(text);
-    }
-
-    //public static void main(String[] args) {
-    //    Message m = new Message("Hello I Am A Message");
-    //    m.display();
-    //    m.edit();
-    //    m.display();
-    //}
 }
