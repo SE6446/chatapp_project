@@ -2,6 +2,8 @@ package com.chatapp;
 import com.chatapp.baseClasses.*;
 
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.Stack;
 import java.util.UUID;
 
 
@@ -43,4 +45,13 @@ public class App {
 
     // TODO implement
     // Do so by adding methods that the UIs would need. Such as a specific chat from an ID.
+
+    public Stack<Chat> getFeed(){
+        //TODO implement
+        throw new UnsupportedOperationException("Not Implemented");
+    }
+    public Message searchMessage(){
+        //TODO implement
+        throw new UnsupportedOperationException("Not Implemented");
+    }
 }
