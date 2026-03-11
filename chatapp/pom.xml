@@ -13,4 +13,28 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    
+
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20250517</version>
+        </dependency>
+
+
+        
+
+    
+
+        <dependency>
+            <groupId>io.fusionauth</groupId>
+            <artifactId>java-http</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
 </project>
