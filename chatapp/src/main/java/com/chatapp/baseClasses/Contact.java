@@ -16,6 +16,10 @@ public class Contact implements Profile, Serializable {
         return phoneNumberID;
     }
 
+    public void setphoneNumber(int newphoneNumber){
+        phoneNumberID = newphoneNumber;
+    }
+
     @Override
     public String getHandle() {
         return name;
@@ -28,6 +32,12 @@ public class Contact implements Profile, Serializable {
     public Contact(String name, int number){
         phoneNumberID = number;
         this.name = name;
+        uuid = UUID.randomUUID();
     }
-    
+
+    public Contact(){
+        phoneNumberID = 000000000;
+        this.name = "Placeholder Name";
+        uuid = UUID.randomUUID();
+    }
 }
