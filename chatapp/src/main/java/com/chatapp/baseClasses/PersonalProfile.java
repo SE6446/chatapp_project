@@ -10,6 +10,8 @@ public class PersonalProfile implements Profile, Serializable {
 
     private UUID uuid;
 
+    
+
     @Override
     public int getphoneNumber() {
         return phoneNumberID;
@@ -27,5 +29,10 @@ public class PersonalProfile implements Profile, Serializable {
     public PersonalProfile(String name, int number){
         phoneNumberID = number;
         this.name = name;
+    }
+
+    @Override
+    public UUID getUUID() {
+        return uuid;
     }
 }

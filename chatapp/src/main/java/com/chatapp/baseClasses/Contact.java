@@ -40,4 +40,9 @@ public class Contact implements Profile, Serializable {
         this.name = "Placeholder Name";
         uuid = UUID.randomUUID();
     }
+
+    @Override
+    public UUID getUUID() {
+        return uuid;
+    }
 }
