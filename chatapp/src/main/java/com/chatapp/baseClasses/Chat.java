@@ -20,6 +20,12 @@ public class Chat implements Serializable{
         host = null;
     }
 
+    public void initialiseChat(){
+        chat.clear();
+        members.clear();
+        members.add(host);
+    }
+
     public LinkedList<Message> getChat() {
         return chat;
     }
