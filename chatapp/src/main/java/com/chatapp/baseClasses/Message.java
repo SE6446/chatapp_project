@@ -5,13 +5,13 @@ import java.io.*; // for files
 
 public class Message {
     Scanner s = new Scanner(System.in);
-    public boolean sentByCurrentUser; // this can be used to decide which side of the screen messages appear on or to attribute it to the correct user 
-    public String senderName; // not yet possible to set;
-    public String text;
-    public Instant timeSent;
-    public Instant timeRecieved; // this must be set later in development as it is not yet possible to send messages
-    public boolean readByOtherUser; // this must be set later in development as it is not yet possible to send messages
-    public File messageAttachment; // could be an image or any other file, images will be displayed differently from other file types in a possible GUI
+    private boolean sentByCurrentUser; // this can be used to decide which side of the screen messages appear on or to attribute it to the correct user 
+    private boolean readByOtherUser; // this must be set later in development as it is not yet possible to send messages
+    private String senderName; // not yet possible to set;
+    private String text;
+    private Instant timeSent;
+    private Instant timeRecieved; // this must be set later in development as it is not yet possible to send messages
+    private File messageAttachment; // could be an image or any other file, images will be displayed differently from other file types in a possible GUI
 
 
     public Message(){
@@ -64,4 +64,59 @@ public class Message {
 
         text = userInput;
     }
+
+    // Get and Set Methods:
+
+    public boolean getSentByCurrentUser(){
+        return sentByCurrentUser;
+    }
+
+    public void setSentByCurrentUser(boolean newValue){
+        sentByCurrentUser = newValue;
+    }
+
+    public boolean getReadByOtherUser(){
+        return readByOtherUser;
+    }
+
+    public void setReadByOtherUser(boolean newValue){
+        readByOtherUser = newValue;
+    }
+
+    public String getSenderName(){
+        return senderName;
+    }
+
+    public void setSenderName(String newValue){
+        senderName = newValue;
+    }
+
+    public String getText(){
+        return text;
+    }
+
+    public void setText(String newValue){
+        text = newValue;
+    }
+
+    public File getAttachment(){
+        return messageAttachment;
+    }
+
+    public void setAttachment(File newFile){
+        messageAttachment = newFile;
+    }
+
+    public Instant getTimeSent(){
+        return timeSent;
+    }
+
+    public Instant getTimeRecieved(){
+        return timeRecieved;
+    }
+
+    public void setTimeRecieved(Instant newInstant){
+        timeRecieved = newInstant;
+    }
+    
 }
