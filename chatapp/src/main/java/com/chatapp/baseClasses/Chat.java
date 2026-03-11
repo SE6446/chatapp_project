@@ -8,11 +8,10 @@ public class Chat implements Serializable{
 
     private LinkedList<Message> chat;
     private ArrayList<Profile> members;
-    private Message front;
 
     public Chat() {
         chat = new LinkedList<>();
-        front = chat.getFirst() ;
+        members = new ArrayList<>() ;
     }
 
     public LinkedList<Message> getChat() {
@@ -20,7 +19,7 @@ public class Chat implements Serializable{
     }
 
     public LinkedList<Message> displayChat() {
-
+        // to display chat from most recent to earliest- can maybe do .toArray()
     }
 
     public Message sendMessage(Message message){
@@ -32,6 +31,8 @@ public class Chat implements Serializable{
         chat.remove(message);
         return message;
     }
+
+    //Adding editing from Message class.
 
 
 }
