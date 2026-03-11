@@ -6,10 +6,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class SaveState implements Serializable{
-    private ArrayList<Contact> contacts;
-    private ArrayList<Chat> chats;
+    private HashMap<UUID,Contact> contacts;
+    private HashMap<UUID,Chat> chats;
     private Profile profile;
     public SaveState(String fileName){
         try {
@@ -49,16 +51,16 @@ public class SaveState implements Serializable{
             System.err.println("An error occured!");
         }
     }
-    public ArrayList<Contact> getContacts() {
+    public HashMap<UUID,Contact> getContacts() {
         return contacts;
     }
-    public void setContacts(ArrayList<Contact> contacts) {
+    public void setContacts(HashMap<UUID,Contact> contacts) {
         this.contacts = contacts;
     }
-    public ArrayList<Chat> getChats() {
+    public HashMap<UUID,Chat> getChats() {
         return chats;
     }
-    public void setChats(ArrayList<Chat> chats) {
+    public void setChats(HashMap<UUID,Chat> chats) {
         this.chats = chats;
     }
     public Profile getProfile() {
