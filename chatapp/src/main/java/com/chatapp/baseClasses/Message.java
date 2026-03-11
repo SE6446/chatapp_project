@@ -19,6 +19,7 @@ public class Message {
         timeSent = Instant.now();
     }
 
+    // Makes user-inputted changes the text variable of the object.
     public void edit(){
         boolean validated = false;
         String userInput = "Default Edit Message"; // called this for debugging
@@ -27,7 +28,7 @@ public class Message {
             System.out.println("Please enter the new line you want to replace the old message with:\nYou can also cancel the edit by inputting \"!CANCEL\"\n");
             userInput = s.nextLine();
 
-            if (userInput.equals("!CANCEL") || userInput.equals("!cancel")){
+            if (userInput.equals("!CANCEL") || userInput.equals("!cancel") || userInput.equals("!Cancel")){
                 System.out.println("Edit Canceled");
                 return;
             }
@@ -35,18 +36,31 @@ public class Message {
             System.out.println("Your edited message is \"" + userInput + "\", is this correct? Y/N: ");
             String validationInput = s.nextLine();
 
-            if (validationInput.equals("Y")){
+            if (validationInput.equals("Y") || validationInput.equals("y")){
                 System.out.println("\nEdit Accepted.");
                 validated = true;
             }
-            else if (validationInput.equals("N")){
+            else if (validationInput.equals("N") || validationInput.equals("n")){
                 System.out.println("\nEdit Aborted, Please Try Again.");
             }
             else{
                 System.out.println("You did not enter a valid option. Please try again.");
             }
         }
-        
+
         text = userInput;
     }
+
+    // Debugging methods below:
+
+    private void display(){
+        System.out.println(text);
+    }
+
+    //public static void main(String[] args) {
+    //    Message m = new Message("Hello I Am A Message");
+    //    m.display();
+    //    m.edit();
+    //    m.display();
+    //}
 }
