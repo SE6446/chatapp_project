@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Chat implements Serializable{
-
     private LinkedList<Message> chat;
     private ArrayList<Profile> members;
     private Profile host;
     private boolean groupChat;
     public Scanner s =  new Scanner(System.in);
+
 
     public Chat() {
         chat = new LinkedList<>();
@@ -28,6 +28,14 @@ public class Chat implements Serializable{
         for (Message m : chat) {
             System.out.println(m.getText());
         }
+    }
+
+    public boolean isGroupChat(){
+        if (members.size() > 2) {
+            groupChat = true;
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<Profile> getMembers() {
