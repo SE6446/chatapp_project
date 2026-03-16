@@ -3,21 +3,29 @@ package com.chatapp.baseClasses;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Scanner;
 
-public class Chat implements Serializable{
+public class Chat implements Serializable {
     private LinkedList<Message> chat;
     private ArrayList<Profile> members;
     private Profile host;
     private boolean groupChat;
-    public Scanner s =  new Scanner(System.in);
+    //public Scanner s =  new Scanner(System.in); // Scanner should be a dependancy injection from the UI.
 
 
-    public Chat() {
+    public Chat(Collection<? extends Profile> chatMembers, Profile hostProfile) {
         chat = new LinkedList<>();
-        members = new ArrayList<>() ;
-        groupChat = false;
-        host = null;
+        //members = new ArrayList<>() ;
+        members = new ArrayList<>(chatMembers);
+        if (members.size() > 1){
+            groupChat = true;
+        }
+        else {
+            groupChat = false;
+        }
+        host = hostProfile;
     }
 
     public void initialiseChat(){
@@ -72,7 +80,7 @@ public class Chat implements Serializable{
         return message;
     }
 
-    public boolean deleteMessage(Message message){
+    public boolean deleteMessage(Message message, Scanner s){
         //will add function to ensure messages can't be deleted by users that aren't the sender.
         boolean confirmed = false;
 
@@ -95,4 +103,8 @@ public class Chat implements Serializable{
     //Adding editing from Message class.
 
 
+
+    public Iterator<Message> iterator(){
+        return chat.iterator();
+    }
 }

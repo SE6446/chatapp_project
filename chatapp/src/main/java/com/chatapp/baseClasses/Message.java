@@ -4,8 +4,8 @@ import java.util.Scanner; // for user inputs
 import java.util.UUID;
 import java.io.*; // for files
 
-public class Message {
-    Scanner s = new Scanner(System.in);
+public class Message implements Serializable {
+    //Scanner s = new Scanner(System.in);
     private boolean sentByCurrentUser; // this can be used to decide which side of the screen messages appear on or to attribute it to the correct user 
     private boolean readByOtherUser; // this must be set later in development as it is not yet possible to send messages
     private String senderName; // not yet possible to set;
@@ -13,7 +13,7 @@ public class Message {
     private Instant timeSent;
     private Instant timeRecieved; // this must be set later in development as it is not yet possible to send messages
     private File messageAttachment; // could be an image or any other file, images will be displayed differently from other file types in a possible GUI
-    private UUID userUUID;
+    private UUID userUUID; //? Best to send this instead of name? Or the Profile class?
     
     
 
@@ -37,7 +37,7 @@ public class Message {
     }
 
     // Makes user-inputted changes the text variable of the object.
-    public void edit(){
+    public void edit(Scanner s){
         boolean validated = false;
         String userInput = "Default Edit Message"; // initially called this for debugging
 
@@ -70,6 +70,11 @@ public class Message {
         }
 
         text = userInput;
+    }
+
+    @Override
+    public String toString(){
+        return text;
     }
 
     // Get and Set Methods:

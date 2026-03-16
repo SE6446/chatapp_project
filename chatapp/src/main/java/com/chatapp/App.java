@@ -1,8 +1,8 @@
 package com.chatapp;
 import com.chatapp.baseClasses.*;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Queue;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -21,11 +21,15 @@ public class App {
         return contacts;
     }
 
-    private Profile profile;
+    private PersonalProfile profile;
     
     
-    public Profile getProfile() {
+    public PersonalProfile getProfile() {
         return profile;
+    }
+
+    public void initAccount(String name, int number){
+        profile = new PersonalProfile(name, number);
     }
     
     public App(String fileName){
@@ -46,11 +50,32 @@ public class App {
     // TODO implement
     // Do so by adding methods that the UIs would need. Such as a specific chat from an ID.
 
+    public Chat getChat(UUID id){
+        return chats.get(id);
+    }
+
+    public UUID createChat(Collection<? extends Contact> contacts){
+        Chat newChat = new Chat(contacts, profile);
+        UUID id = UUID.randomUUID();
+        chats.put(id, newChat);
+        return id;
+    }
+
+    public UUID addChat(Chat chat){
+        UUID id = UUID.randomUUID();
+        chats.put(id, chat);
+        return id;
+    }
+
+    public Contact getContact(UUID id){
+        return contacts.get(id);
+    }
+
     public Stack<Chat> getFeed(){
         //TODO implement
         throw new UnsupportedOperationException("Not Implemented");
     }
-    public Message searchMessage(){
+    public Message searchMessage(String keywordString){
         //TODO implement
         throw new UnsupportedOperationException("Not Implemented");
     }
