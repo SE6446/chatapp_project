@@ -12,7 +12,7 @@ import java.util.UUID;
 public class SaveState implements Serializable{
     private HashMap<UUID,Contact> contacts;
     private HashMap<UUID,Chat> chats;
-    private Profile profile;
+    private PersonalProfile profile;
     public SaveState(String fileName){
         try {
             FileInputStream saveInput = new FileInputStream(fileName);
@@ -63,10 +63,10 @@ public class SaveState implements Serializable{
     public void setChats(HashMap<UUID,Chat> chats) {
         this.chats = chats;
     }
-    public Profile getProfile() {
+    public PersonalProfile getProfile() {
         return profile;
     }
-    public void setProfile(Profile profile) {
+    public void setProfile(PersonalProfile profile) {
         this.profile = profile;
     }
     

@@ -29,6 +29,7 @@ public class PersonalProfile implements Profile, Serializable {
     public PersonalProfile(String name, int number){
         phoneNumberID = number;
         this.name = name;
+        uuid = UUID.randomUUID();
     }
 
     @Override
