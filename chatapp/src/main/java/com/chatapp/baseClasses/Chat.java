@@ -121,4 +121,21 @@ public class Chat implements Serializable {
     public Iterator<Message> iterator(){
         return chat.iterator();
     }
+
+    public Iterator<Message> reverseIterator(){
+        return chat.descendingIterator();
+    }
+
+    @Override
+    public String toString(){
+        String outputString = "";
+        outputString += "Chat with: ";
+        for (int i = 0; i < members.size(); i++) {
+            outputString += members.get(i).getHandle() +", ";
+        }
+        outputString += "\n";
+        outputString += chat.getLast();
+        
+        return outputString;
+    }
 }

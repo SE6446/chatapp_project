@@ -74,7 +74,7 @@ public class Message implements Serializable {
 
     @Override
     public String toString(){
-        return text;
+        return senderName + ": " + text;
     }
 
     // Get and Set Methods:

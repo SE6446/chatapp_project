@@ -112,8 +112,11 @@ public class App {
     }
 
     public Stack<Chat> getFeed(){
-        //TODO implement
-        throw new UnsupportedOperationException("Not Implemented");
+        Stack<Chat> feed = new Stack<>();
+        for (Chat chat : chats.toArray()) {
+           feed.add(chat);
+        }
+        return feed;
     }
     public Message searchMessage(String keywordString, Chat chat){
         //TODO implement
