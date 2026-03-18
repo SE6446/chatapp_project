@@ -11,11 +11,11 @@ import java.util.UUID;
 
 
 public class App {
-    // A tree could be used here but it's more complex for not much gain as we're not building a proper database.
-    // As UUIDs are essentially random and have no innate ordering. But if we used a simpler identifier than maybe.
-    // Let me know what you think - Archie
-    private HashMap<UUID, Chat> chats;
-    public HashMap<UUID, Chat> getChats() {
+    //* */ A tree could be used here but it's more complex for not much gain as we're not building a proper database.
+    //* */ As UUIDs are essentially random and have no innate ordering. But if we used a simpler identifier than maybe.
+    //* */ Let me know what you think - Archie
+    private SelfSortedChatList<UUID, Chat> chats;
+    public SelfSortedChatList<UUID, Chat> getChats() {
         return chats;
     }
 
