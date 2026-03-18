@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -118,9 +119,16 @@ public class App {
         }
         return feed;
     }
-    public Message searchMessage(String keywordString, Chat chat){
-        //TODO implement
-        throw new UnsupportedOperationException("Not Implemented");
+    public Stack<Message> searchForMessage(String keywordString, Chat chat){
+        Stack<Message> matchedMessages = new Stack<>();
+        Iterator<Message> chatIterator = chat.iterator();
+        while (chatIterator.hasNext()) {
+            Message itemMessage = chatIterator.next();
+            if (itemMessage.toString().contains(keywordString)) {
+                matchedMessages.add(itemMessage);
+            }
+        }
+        return matchedMessages;
     }
 
     public void save(String fileString) throws Exception {

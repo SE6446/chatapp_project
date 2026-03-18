@@ -4,8 +4,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 import com.chatapp.App;
-import com.chatapp.baseClasses.Chat;
-import com.chatapp.baseClasses.PersonalProfile;
+import com.chatapp.baseClasses.*;
 
 public class CLI {
     static App app;
