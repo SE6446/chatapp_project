@@ -42,14 +42,20 @@ public class CLI {
                     answer = scanner.nextInt();
 
                     if (answer == 1){
-                        // name editing stuff here
+                        System.out.println("What do you want your new name to be?");
+                        scanner.nextLine(); // to eat the empty line
+                        String reply = scanner.nextLine();
+                        app.editProfile(reply, -1);
                     }
                     else if (answer == 2){
-                        // phone num editing stuff goes here
+                        System.out.println("What do you want your new number to be?");
+                        answer = scanner.nextInt();
+                        app.editProfile(null, answer);
                     }
                     else{
                         System.out.println("That was not a valid option, please try again.");
                     }
+                    
                     break;
                     
                 case 2:
