@@ -28,6 +28,10 @@ public class PersonalProfile implements Profile, Serializable {
         name = handle;
     }
 
+    public void setPhoneNumberID(int phoneNumberID) {
+        this.phoneNumberID = phoneNumberID;
+    }
+    
     @Override
     public UUID getUUID() {
         return uuid;

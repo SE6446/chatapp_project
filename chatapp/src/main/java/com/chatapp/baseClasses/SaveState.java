@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.chatapp.App;
+
 public class SaveState implements Serializable{
     private HashMap<UUID,Contact> contacts;
     private HashMap<UUID,Chat> chats;
@@ -32,7 +34,15 @@ public class SaveState implements Serializable{
             
         }
     }
+    public SaveState(App app){
+        transfer(app);
+    }
 
+    protected void transfer(App state){
+        this.chats = state.getChats();
+        this.contacts = state.getContacts();
+        this.profile = state.getProfile();
+    }
     protected void transfer(SaveState state){
         this.chats = state.getChats();
         this.contacts = state.getContacts();

@@ -1,6 +1,8 @@
 package com.chatapp;
 import com.chatapp.baseClasses.*;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,8 +42,10 @@ public class App {
         profile = saveState.getProfile();
     }
 
-    public App(SaveState saveState) throws Exception{
-        throw new Exception("Not Implemented");
+    public App(SaveState saveState) throws Exception {
+        chats = saveState.getChats();
+        contacts = saveState.getContacts();
+        profile = saveState.getProfile();
     }
 
     public App(){
@@ -55,8 +59,8 @@ public class App {
         return chats.get(id);
     }
 
-    public UUID createChat(Collection<? extends Contact> contacts){
-        Chat newChat = new Chat(contacts, profile);
+    public UUID createGroupChat(Collection<Contact> contacts){
+        Chat newChat = new Chat(contacts);
         UUID id = UUID.randomUUID();
         chats.put(id, newChat);
         return id;
@@ -72,10 +76,13 @@ public class App {
         return contacts.get(id);
     }
 
-    public void addContact(String name, int number){
+    public UUID addContact(String name, int number){
         UUID uuid = UUID.randomUUID();
-        Contact contact = new Contact(name, number);
+        Contact contact = new Contact(name, number, uuid);
         contacts.put(uuid, contact);
+        Chat p2pChat = new Chat(contact);
+        chats.put(uuid, p2pChat); // Make this the same id for easy searching
+        return uuid;
     }
 
     public Contact getContactFromNumber(int number){
@@ -89,12 +96,55 @@ public class App {
 
     }
 
+    public Chat getChatFromContact(Contact contact){
+        UUID uuid = contact.getUUID();
+        return chats.get(uuid);
+    }
+    
+    public HashMap<UUID, Chat> getGroupChats(){
+        HashMap<UUID, Chat> groupChats = new HashMap<>();
+        for (UUID id : chats.keySet()) {
+            if (chats.get(id).isHost()) {
+                groupChats.put(id, chats.get(id));
+            }
+        }
+        return groupChats;
+    }
+
     public Stack<Chat> getFeed(){
         //TODO implement
         throw new UnsupportedOperationException("Not Implemented");
     }
-    public Message searchMessage(String keywordString){
+    public Message searchMessage(String keywordString, Chat chat){
         //TODO implement
         throw new UnsupportedOperationException("Not Implemented");
+    }
+
+    public void save(String fileString) throws Exception {
+        SaveState saveState = new SaveState(this);
+        try {
+            FileOutputStream saveFileOutputStream = new FileOutputStream(fileString + ".bin");
+            ObjectOutputStream saveObjectOutputStream = new ObjectOutputStream(saveFileOutputStream);
+            saveObjectOutputStream.writeObject(saveState);
+            saveObjectOutputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("An error occured!");
+        }
+    }
+    
+    /**
+     * Edit the personal profile of the user, to not edit name, input null, to not edit phone number input -1
+     * @param name String
+     * @param phoneNumberID int
+     */
+    public void editProfile(String name, int phoneNumberID){
+        if (name != null) {
+            profile.setHandle(name);
+        }
+        if (phoneNumberID != -1) {
+            profile.setPhoneNumberID(phoneNumberID);
+        }
     }
 }
