@@ -61,4 +61,15 @@ public class PersonalProfile implements Profile, Serializable {
         contactsList.add(contact);
     }
 
+    public void displayContacts(){
+        int counter = 1;
+        for (Contact i: contactsList){
+            System.out.println("Contact " +counter + ":\n");
+            System.out.println("UUID: " + i.getUUID());
+            System.out.println("Name: " + i.getHandle());
+            System.out.println("Phone Number:" + i.getphoneNumber() + "\n");
+            counter++;
+        }
+    }
+
 }
