@@ -32,6 +32,7 @@ public class Contact implements Profile, Serializable {
     public Contact(String name, int number){
         phoneNumberID = number;
         this.name = name;
+        // In a networking scenario we would get this from the server.
         uuid = UUID.randomUUID();
     }
 

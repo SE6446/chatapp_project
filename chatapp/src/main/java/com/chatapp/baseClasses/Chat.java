@@ -13,6 +13,7 @@ public class Chat implements Serializable {
     private Profile host;
     private boolean groupChat;
     //public Scanner s =  new Scanner(System.in); // Scanner should be a dependancy injection from the UI.
+    //As it would be different from the cli to the GUI.
 
 
     public Chat(Collection<? extends Profile> chatMembers, Profile hostProfile) {

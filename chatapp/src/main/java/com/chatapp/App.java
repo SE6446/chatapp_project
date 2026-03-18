@@ -1,6 +1,7 @@
 package com.chatapp;
 import com.chatapp.baseClasses.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Stack;
@@ -69,6 +70,23 @@ public class App {
 
     public Contact getContact(UUID id){
         return contacts.get(id);
+    }
+
+    public void addContact(String name, int number){
+        UUID uuid = UUID.randomUUID();
+        Contact contact = new Contact(name, number);
+        contacts.put(uuid, contact);
+    }
+
+    public Contact getContactFromNumber(int number){
+        ArrayList<Contact> contactValues = (ArrayList<Contact>) contacts.values(); //What the fuck
+        for (Contact contact : contactValues) {
+            if (contact.getphoneNumber() == number) {
+                return contact;
+            }
+        }
+        return null;
+
     }
 
     public Stack<Chat> getFeed(){
