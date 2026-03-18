@@ -12,7 +12,7 @@ import com.chatapp.App;
 
 public class SaveState implements Serializable{
     private HashMap<UUID,Contact> contacts;
-    private HashMap<UUID,Chat> chats;
+    private SelfSortedChatList<UUID,Chat> chats;
     private PersonalProfile profile;
     public SaveState(String fileName){
         try {
@@ -66,10 +66,10 @@ public class SaveState implements Serializable{
     public void setContacts(HashMap<UUID,Contact> contacts) {
         this.contacts = contacts;
     }
-    public HashMap<UUID,Chat> getChats() {
+    public SelfSortedChatList<UUID,Chat> getChats() {
         return chats;
     }
-    public void setChats(HashMap<UUID,Chat> chats) {
+    public void setChats(SelfSortedChatList<UUID,Chat> chats) {
         this.chats = chats;
     }
     public PersonalProfile getProfile() {
