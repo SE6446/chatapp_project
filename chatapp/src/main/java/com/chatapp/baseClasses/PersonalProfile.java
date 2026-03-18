@@ -41,6 +41,7 @@ public class PersonalProfile implements Profile, Serializable {
         phoneNumberID = number;
         this.name = name;
         uuid = UUID.randomUUID();
+        contactsList = new ArrayList<Contact>();
     }
 
     public void addContact(Contact contact){
@@ -50,12 +51,13 @@ public class PersonalProfile implements Profile, Serializable {
     public void addContact(Scanner s){ // Manual Version
         // creating a new contact
         Contact contact = new Contact();
-
+        s.nextLine(); // to eat the empty line
         // set values
         System.out.println("Please enter the name of the contact:\n");
         contact.setHandle(s.nextLine());
         System.out.println("Please enter the phone number of the contact:\n");
         contact.setphoneNumber(s.nextInt());
+
 
         // add to the contact list
         contactsList.add(contact);

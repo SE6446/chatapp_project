@@ -1,8 +1,10 @@
 package com.chatapp.UI;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import com.chatapp.App;
+import com.chatapp.baseClasses.Chat;
 import com.chatapp.baseClasses.PersonalProfile;
 
 public class CLI {
@@ -15,11 +17,11 @@ public class CLI {
             app = new App(args[0]);
         }
         init();
-
+        landingPage();
 
     }
     static void init(){
-        if(app.getProfile().equals(null)){
+        if(app.getProfile() == null){
             System.out.println("Please enter the name for your profile:\n");
             String name = scanner.nextLine();
             System.out.println("Please enter the phone number for your profile:\n");
@@ -55,16 +57,36 @@ public class CLI {
                     break;
                 
                 case 3:
-                    // create chats
+                    // create chats /////////////////////////////////////
                     break;
 
-                case 3:
-                    // view chats
+                case 4:
+                    Chat selectedChat;
+                    app.getProfile().displayContacts();
+                    System.out.println("Please enter the ID of the user that you want to see that chat with: ");
+                    scanner.nextLine(); // to eat the empty line
+                    String reply = scanner.nextLine();
+                    try {
+                        UUID.fromString(reply);
+                    } catch (Exception e) {
+                        System.out.println("You have not entered a valid ID, please try something else.");
+                        break;
+                    }
+
+                    try {
+                        selectedChat = app.getChat(UUID.fromString(reply));
+                    } catch (Exception e) {
+                        System.out.println("You have no chats with this contact.");
+                        break;
+                    }
+
+                    selectedChat.displayChat();
+                    
                     break;
                 default:
                     System.out.println("That was not a valid option, please try again.");
                     break;
-        }
+                }
         }
 
     }
