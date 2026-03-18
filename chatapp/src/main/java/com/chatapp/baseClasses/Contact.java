@@ -29,11 +29,11 @@ public class Contact implements Profile, Serializable {
         name = handle;
     }
 
-    public Contact(String name, int number){
+    public Contact(String name, int number, UUID inputUuid){
         phoneNumberID = number;
         this.name = name;
         // In a networking scenario we would get this from the server.
-        uuid = UUID.randomUUID();
+        uuid = inputUuid;
     }
 
     public Contact(){

@@ -59,7 +59,7 @@ public class App {
         return chats.get(id);
     }
 
-    public UUID createChat(Collection<Contact> contacts){
+    public UUID createGroupChat(Collection<Contact> contacts){
         Chat newChat = new Chat(contacts);
         UUID id = UUID.randomUUID();
         chats.put(id, newChat);
@@ -76,11 +76,13 @@ public class App {
         return contacts.get(id);
     }
 
-    public void addContact(String name, int number){
+    public UUID addContact(String name, int number){
         UUID uuid = UUID.randomUUID();
-        Contact contact = new Contact(name, number);
+        Contact contact = new Contact(name, number, uuid);
         contacts.put(uuid, contact);
         Chat p2pChat = new Chat(contact);
+        chats.put(uuid, p2pChat); // Make this the same id for easy searching
+        return uuid;
     }
 
     public Contact getContactFromNumber(int number){
@@ -92,6 +94,21 @@ public class App {
         }
         return null;
 
+    }
+
+    public Chat getChatFromContact(Contact contact){
+        UUID uuid = contact.getUUID();
+        return chats.get(uuid);
+    }
+    
+    public HashMap<UUID, Chat> getGroupChats(){
+        HashMap<UUID, Chat> groupChats = new HashMap<>();
+        for (UUID id : chats.keySet()) {
+            if (chats.get(id).isHost()) {
+                groupChats.put(id, chats.get(id));
+            }
+        }
+        return groupChats;
     }
 
     public Stack<Chat> getFeed(){
@@ -114,6 +131,20 @@ public class App {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("An error occured!");
+        }
+    }
+    
+    /**
+     * Edit the personal profile of the user, to not edit name, input null, to not edit phone number input -1
+     * @param name String
+     * @param phoneNumberID int
+     */
+    public void editProfile(String name, int phoneNumberID){
+        if (name != null) {
+            profile.setHandle(name);
+        }
+        if (phoneNumberID != -1) {
+            profile.setPhoneNumberID(phoneNumberID);
         }
     }
 }

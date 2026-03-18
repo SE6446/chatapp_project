@@ -26,6 +26,10 @@ public class PersonalProfile implements Profile, Serializable {
         name = handle;
     }
 
+    public void setPhoneNumberID(int phoneNumberID) {
+        this.phoneNumberID = phoneNumberID;
+    }
+    
     public PersonalProfile(String name, int number){
         phoneNumberID = number;
         this.name = name;

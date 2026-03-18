@@ -52,6 +52,10 @@ public class Chat implements Serializable {
         }
     }
 
+    public boolean isHost(){
+        return isHost;
+    }
+
     public boolean isGroupChat(){
         if (members.size() > 2) {
             groupChat = true;
