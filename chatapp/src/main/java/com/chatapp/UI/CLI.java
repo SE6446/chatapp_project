@@ -3,6 +3,7 @@ package com.chatapp.UI;
 import java.util.Scanner;
 
 import com.chatapp.App;
+import com.chatapp.baseClasses.PersonalProfile;
 
 public class CLI {
     static App app;
@@ -19,11 +20,52 @@ public class CLI {
     }
     static void init(){
         if(app.getProfile().equals(null)){
-            //TODO Add initalisation code
+            System.out.println("Please enter the name for your profile:\n");
+            String name = scanner.nextLine();
+            System.out.println("Please enter the phone number for your profile:\n");
+            int number = scanner.nextInt();
+            app.initAccount(name, number);
         }
     }
     static void landingPage(){
-        
+        while (true){
+            System.out.println("Please enter the number for the command you wish to do.");
+            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create chat\n4 - view chats");
+            int answer = scanner.nextInt();
+            
+            switch (answer) {
+                case 1:
+                    System.out.println("What do you wish to edit?");
+                    System.out.println("1 - Name\n2 - Phone Number");
+                    answer = scanner.nextInt();
+
+                    if (answer == 1){
+                        // name editing stuff here
+                    }
+                    else if (answer == 2){
+                        // phone num editing stuff goes here
+                    }
+                    else{
+                        System.out.println("That was not a valid option, please try again.");
+                    }
+                    break;
+                    
+                case 2:
+                    app.getProfile().addContact(scanner); // may want to do a different way later
+                    break;
+                
+                case 3:
+                    // create chats
+                    break;
+
+                case 3:
+                    // view chats
+                    break;
+                default:
+                    System.out.println("That was not a valid option, please try again.");
+                    break;
+        }
+        }
 
     }
     static void addContact(){
