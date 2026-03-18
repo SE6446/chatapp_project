@@ -9,30 +9,37 @@ import java.util.Scanner;
 
 public class Chat implements Serializable {
     private LinkedList<Message> chat;
-    private ArrayList<Profile> members;
-    private Profile host;
+    private ArrayList<Contact> members;
+    private boolean isHost = false;
     private boolean groupChat;
     //public Scanner s =  new Scanner(System.in); // Scanner should be a dependancy injection from the UI.
     //As it would be different from the cli to the GUI.
 
 
-    public Chat(Collection<? extends Profile> chatMembers, Profile hostProfile) {
-        chat = new LinkedList<>();
-        //members = new ArrayList<>() ;
-        members = new ArrayList<>(chatMembers);
+    public Chat(Collection<Contact> chatMembers) {
+        members.addAll(chatMembers);
         if (members.size() > 1){
             groupChat = true;
         }
         else {
             groupChat = false;
         }
-        host = hostProfile;
+        isHost = true; // If instatiating a class like this, we can assume the instantiator is the host.
     }
 
+    public Chat(Contact contact){
+        groupChat = false;
+        isHost = true;
+        members.add(contact);
+    }
+
+    /**
+     * @deprecated What is this even for?
+     */
     public void initialiseChat(){
         chat.clear();
         members.clear();
-        members.add(host);
+        //members.add(host); // As host is no longer a profile class, this cannot work
     }
 
     public LinkedList<Message> getChat() {
@@ -53,18 +60,20 @@ public class Chat implements Serializable {
         return false;
     }
 
-    public ArrayList<Profile> getMembers() {
+    public ArrayList<? extends Profile> getMembers() {
         return members;
     }
 
-    public void addMember(Profile p) {
-        members.add(p);
+    public void addMember(Contact p) {
+        if (isHost) {
+            members.add(p);
+        }
     }
 
     public void kickMember(Profile kicker, Profile kicked) {
         if (groupChat) {
 
-            if (kicker != host) {
+            if (!isHost) {
                 System.out.println("Permission Denied: You are not the host of this chat.");
                 return;
             } else {

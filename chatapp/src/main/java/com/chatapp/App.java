@@ -1,6 +1,8 @@
 package com.chatapp;
 import com.chatapp.baseClasses.*;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,8 +42,10 @@ public class App {
         profile = saveState.getProfile();
     }
 
-    public App(SaveState saveState) throws Exception{
-        throw new Exception("Not Implemented");
+    public App(SaveState saveState) throws Exception {
+        chats = saveState.getChats();
+        contacts = saveState.getContacts();
+        profile = saveState.getProfile();
     }
 
     public App(){
@@ -55,8 +59,8 @@ public class App {
         return chats.get(id);
     }
 
-    public UUID createChat(Collection<? extends Contact> contacts){
-        Chat newChat = new Chat(contacts, profile);
+    public UUID createChat(Collection<Contact> contacts){
+        Chat newChat = new Chat(contacts);
         UUID id = UUID.randomUUID();
         chats.put(id, newChat);
         return id;
@@ -76,6 +80,7 @@ public class App {
         UUID uuid = UUID.randomUUID();
         Contact contact = new Contact(name, number);
         contacts.put(uuid, contact);
+        Chat p2pChat = new Chat(contact);
     }
 
     public Contact getContactFromNumber(int number){
@@ -93,8 +98,22 @@ public class App {
         //TODO implement
         throw new UnsupportedOperationException("Not Implemented");
     }
-    public Message searchMessage(String keywordString){
+    public Message searchMessage(String keywordString, Chat chat){
         //TODO implement
         throw new UnsupportedOperationException("Not Implemented");
+    }
+
+    public void save(String fileString) throws Exception {
+        SaveState saveState = new SaveState(this);
+        try {
+            FileOutputStream saveFileOutputStream = new FileOutputStream(fileString + ".bin");
+            ObjectOutputStream saveObjectOutputStream = new ObjectOutputStream(saveFileOutputStream);
+            saveObjectOutputStream.writeObject(saveState);
+            saveObjectOutputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("An error occured!");
+        }
     }
 }
