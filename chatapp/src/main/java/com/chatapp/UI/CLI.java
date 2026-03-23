@@ -17,21 +17,20 @@ public class CLI {
     public static void main(String[] args) {
         if (args.length == 0){
             app = new App();
+            init(); // we only init if we're not loading from a save
         } else if (args.length == 1){
-            app = new App(args[0]);
+            app = new App(args[0]); //Input filename
         }
-        init();
         landingPage();
 
     }
-    static void init(){
-        if(app.getProfile() == null){
-            System.out.println("Please enter the name for your profile:\n");
-            String name = scanner.nextLine();
-            System.out.println("Please enter the phone number for your profile:\n");
-            int number = scanner.nextInt();
-            app.initAccount(name, number);
-        }
+    static void init(){    
+        System.out.println("Please enter the name for your profile:\n");
+        String name = scanner.nextLine();
+        System.out.println("Please enter the phone number for your profile:\n");
+        int number = scanner.nextInt();
+        app.initAccount(name, number);
+        
     }
     static void landingPage(){
         while (true){
