@@ -103,6 +103,16 @@ public class App {
 
     }
 
+    public Contact getContactFromNumber(String number){
+        ArrayList<Contact> contactValues = (ArrayList<Contact>) contacts.values(); //What the fuck
+        for (Contact contact : contactValues) {
+            if (contact.getphoneNumber() == Integer.parseInt(number)) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
     public Chat getChatFromContact(Contact contact){
         UUID uuid = contact.getUUID();
         return chats.get(uuid);

@@ -1,7 +1,9 @@
 package com.chatapp.UI;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 //import java.util.UUID;
+import java.util.List;
 
 import com.chatapp.App;
 import com.chatapp.baseClasses.*;
@@ -73,6 +75,15 @@ public class CLI {
                 
                 case 3:
                     // create group chat
+                    System.out.println("Input the phone numbers to include (comma seperated): ");
+                    String numbersString = scanner.nextLine();
+                    String[] numbers = numbersString.split(",");
+                    ArrayList<Contact> contacts = new ArrayList<>();
+                    for (String groupNumber : numbers) {
+                        Contact contact = app.getContactFromNumber(groupNumber);
+                        contacts.add(contact);
+                    }
+                    app.createGroupChat(contacts);
                     break;
 
                 case 4:
