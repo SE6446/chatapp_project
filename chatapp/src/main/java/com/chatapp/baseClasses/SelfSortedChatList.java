@@ -1,10 +1,10 @@
 package com.chatapp.baseClasses;
 
-import java.util.Collection;
+//import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.UUID;
+//import java.util.UUID;
 
 public class SelfSortedChatList<K, V extends Chat> extends LinkedHashMap<K, V> {
     public void update(Message message, K key){
@@ -18,9 +18,20 @@ public class SelfSortedChatList<K, V extends Chat> extends LinkedHashMap<K, V> {
         return list.descendingIterator();
     }
     
+    @SuppressWarnings("unchecked")
     public V[] toArray(){
         LinkedList<V> list = (LinkedList<V>) this.values();
         return (V[]) list.toArray();
+    }
+
+    @Override
+    public String toString() {
+        String output = "";
+        Iterator<V> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            output += iterator.next().toString() + "\n";
+        }
+        return output;
     }
 
 }

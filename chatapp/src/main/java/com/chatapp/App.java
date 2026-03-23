@@ -77,6 +77,12 @@ public class App {
         return contacts.get(id);
     }
 
+    /**
+     * Adds a new Contact, AND creates a corresponding chat.
+     * @param name
+     * @param number
+     * @return the UUID of the contact/chat
+     */
     public UUID addContact(String name, int number){
         UUID uuid = UUID.randomUUID();
         Contact contact = new Contact(name, number, uuid);
