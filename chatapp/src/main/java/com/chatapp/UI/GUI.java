@@ -1,6 +1,11 @@
 package com.chatapp.UI;
 
-public class GUI {
+import com.chatapp.App;
+import com.chatapp.baseClasses.*;
 
-    
+
+
+public class GUI {
+    static App app;
+        
 }
