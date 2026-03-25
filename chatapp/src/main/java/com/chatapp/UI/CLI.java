@@ -1,8 +1,10 @@
 package com.chatapp.UI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.UUID;
 //import java.util.UUID;
 import java.util.List;
 
@@ -128,6 +130,7 @@ public class CLI {
                     break;
                 case 6:
                     // view contact
+                    printContacts();
                     System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
                     scanner.nextLine(); // to eat the empty line
                     reply = scanner.nextLine();
@@ -162,6 +165,18 @@ public class CLI {
             }
         
             
+        }
+    }
+
+    static void printContacts(){
+        flushCli();
+        HashMap<UUID, Contact> contacts = app.getContacts();
+        int i = 0;
+        System.out.println("Contacts: ");
+        System.out.println("=====");
+        for (Contact contact : contacts.values()) {
+            System.out.println(i + ": " + contact);
+            System.out.println("=====");
         }
     }
 
