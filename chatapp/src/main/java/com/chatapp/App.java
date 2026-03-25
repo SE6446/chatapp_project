@@ -50,7 +50,9 @@ public class App {
     }
 
     public App(){
-        // Keep empty for default init.
+        chats = new SelfSortedChatList<>();
+        contacts = new HashMap<UUID, Contact>();
+        profile = new PersonalProfile();
     }
 
     // TODO implement
