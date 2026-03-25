@@ -49,7 +49,7 @@ public class Chat implements Serializable {
 
     public void displayChat() {
         for (Message m : chat) {
-            System.out.println(m.getText());
+            System.out.println(m.getSenderName()+ ": "+m.getText());
         }
     }
 
