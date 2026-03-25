@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -95,12 +96,14 @@ public class App {
     }
 
     public Contact getContactFromNumber(int number){
-        ArrayList<Contact> contactValues = (ArrayList<Contact>) contacts.values(); //What the fuck
-        for (Contact contact : contactValues) {
-            if (contact.getphoneNumber() == number) {
-                return contact;
+        Iterator<Map.Entry<UUID,Contact>> it = contacts.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<UUID, Contact> me = it.next();
+            if (me.getValue().getphoneNumber() == number) {
+                return me.getValue();
             }
         }
+        
         return null;
 
     }
