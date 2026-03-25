@@ -1,7 +1,6 @@
 package com.chatapp.UI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.UUID;
@@ -56,7 +55,7 @@ public class CLI {
                 System.out.println(feed.pop());
             }
             System.out.println("Please enter the number for the command you wish to do.");
-            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats");
+            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats\n5 - Group Chats\n6 - View Contact");
             int answer = scanner.nextInt();
             
             switch (answer) {
@@ -114,15 +113,6 @@ public class CLI {
                     System.out.println("If you want to access a group chat then please enter GC");
                     scanner.nextLine(); // to eat the empty line
                     String reply = scanner.nextLine();
-
-                    if (reply.equals("GC")){
-                        int counter = 0;
-                        for (Object values : app.getGroupChats().values()){
-                            counter++;
-                            System.out.println("Group Chat " + counter + ": " + values);
-                        }
-                        break;
-                    }
                     Contact contact = app.getContactFromNumber(Integer.parseInt(reply));
 
                     //try {
@@ -143,10 +133,14 @@ public class CLI {
                 
                 case 5:
                     // Group chats
+                    int counter = 0;
+                    for (Object values : app.getGroupChats().values()){
+                        counter++;
+                        System.out.println("Group Chat " + counter + ": " + values);
+                    }
                     break;
                 case 6:
                     // view contact
-                    printContacts();
                     System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
                     scanner.nextLine(); // to eat the empty line
                     reply = scanner.nextLine();
@@ -181,18 +175,6 @@ public class CLI {
             }
         
             
-        }
-    }
-
-    static void printContacts(){
-        flushCli();
-        HashMap<UUID, Contact> contacts = app.getContacts();
-        int i = 0;
-        System.out.println("Contacts: ");
-        System.out.println("=====");
-        for (Contact contact : contacts.values()) {
-            System.out.println(i + ": " + contact);
-            System.out.println("=====");
         }
     }
 

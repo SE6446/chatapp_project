@@ -66,6 +66,7 @@ public class App {
 
     public UUID createGroupChat(Collection<Contact> contacts){
         Chat newChat = new Chat(contacts);
+        newChat.setGroupChatStatus(true);
         UUID id = UUID.randomUUID();
         chats.put(id, newChat);
         return id;

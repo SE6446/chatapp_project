@@ -13,27 +13,23 @@ public class Chat implements Serializable {
     private LinkedList<Message> chat = new LinkedList<>();
     private ArrayList<Contact> members = new ArrayList<>();
     private boolean isHost = false;
-    private boolean groupChat;
+    private boolean groupChat = false;
     //public Scanner s =  new Scanner(System.in); // Scanner should be a dependancy injection from the UI.
     //As it would be different from the cli to the GUI.
 
 
     public Chat(Collection<Contact> chatMembers) {
         members.addAll(chatMembers);
-        if (members.size() > 1){
-            groupChat = true;
-        }
-        else {
-            groupChat = false;
-        }
+        groupChat = false;
         isHost = true; // If instatiating a class like this, we can assume the instantiator is the host.
     }
 
     public Chat(Contact contact){
-        groupChat = false;
         isHost = true;
+        groupChat = false;
         members.add(contact);
     }
+
 
     /**
      * @deprecated What is this even for?
@@ -58,12 +54,12 @@ public class Chat implements Serializable {
         return isHost;
     }
 
+    public void setGroupChatStatus(Boolean status){
+        groupChat = status;
+    }
+
     public boolean isGroupChat(){
-        if (members.size() > 2) {
-            groupChat = true;
-            return true;
-        }
-        return false;
+        return groupChat;
     }
 
     public ArrayList<? extends Profile> getMembers() {
