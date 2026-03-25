@@ -107,7 +107,10 @@ public class CLI {
                         System.out.println("You have no chats with this contact.");
                         break;
                     }
-                    selectedChat.displayChat();
+                    chatPage(selectedChat);
+                    break;
+                
+                case 5:
                     break;
                 default:
                     System.out.println("That was not a valid option, please try again.");
@@ -120,6 +123,26 @@ public class CLI {
         String nameString = scanner.nextLine();
         int number = Integer.parseInt(scanner.nextLine());
         app.addContact(nameString, number);
+    }
+
+    static void chatPage(Chat chat){
+        while (true) {
+            flushCli();
+            chat.displayChat();
+            System.out.println("Write something to send, press enter with no text to exit bact to main menu:\n");
+            String messageString = scanner.nextLine();
+            if (messageString != "") {
+                Message message = new Message(messageString, app.getProfile());
+                chat.sendMessage(message);
+            } else {
+                return; // This is the only exit condition.
+            }
+        }
+    }
+
+    protected static void flushCli(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
 }
