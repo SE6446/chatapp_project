@@ -151,7 +151,7 @@ public class Chat implements Serializable {
             outputString += members.get(i).getHandle() +", ";
         }
         outputString += "\n";
-        if (chat != null) {
+        if (chat.size()!=0) {
             outputString += chat.getLast();
         }
         
