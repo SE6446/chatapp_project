@@ -2,6 +2,7 @@ package com.chatapp.UI;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.UUID;
 //import java.util.UUID;
 import java.util.List;
@@ -42,6 +43,17 @@ public class CLI {
     }
     static void landingPage(){
         while (true){
+            System.out.println("Current feed");
+            Stack<Chat> feed = app.getFeed();
+            int limit;
+            if (feed.size() <= 3) {
+                limit = feed.size();
+            } else {
+                limit = 3;
+            }
+            for (int i = 0; i < limit; i++) {
+                System.out.println(feed.pop());
+            }
             System.out.println("Please enter the number for the command you wish to do.");
             System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats");
             int answer = scanner.nextInt();
@@ -127,7 +139,19 @@ public class CLI {
                     }
                     chatPage(selectedChat);
                     break;
-                    
+                
+                case 5:
+                    // Group chats
+                    break;
+                case 6:
+                    // view contact
+                    System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
+                    scanner.nextLine(); // to eat the empty line
+                    reply = scanner.nextLine();
+                    contact = app.getContactFromNumber(Integer.parseInt(reply));
+                    System.out.println("Contact: "+contact);
+                    System.out.println("Most Recent Messages:\n" + app.getMostRecentMessages(contact));
+                    break;
                 default:
                     System.out.println("That was not a valid option, please try again.");
                     break;
@@ -143,17 +167,16 @@ public class CLI {
 
     static void chatPage(Chat chat){
         while (true) {
-            
-                flushCli();
-                chat.displayChat();
-                System.out.println("Write something to send, press enter with no text to exit back to main menu:\n");
-                String messageString = scanner.nextLine();
-                if (messageString != "") {
-                    Message message = new Message(messageString, app.getProfile());
-                    chat.sendMessage(message);
-                } else {
-                    return; // This is the only exit condition.
-                }
+            flushCli();
+            chat.displayChat();
+            System.out.println("Write something to send, press enter with no text to exit bact to main menu:\n");
+            String messageString = scanner.nextLine();
+            if (messageString != "") {
+                Message message = new Message(messageString, app.getProfile());
+                chat.sendMessage(message);
+            } else {
+                return; // This is the only exit condition.
+            }
         
             
         }

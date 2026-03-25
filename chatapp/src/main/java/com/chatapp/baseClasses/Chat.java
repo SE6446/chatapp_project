@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Chat implements Serializable {
     private LinkedList<Message> chat = new LinkedList<>();
@@ -115,6 +116,21 @@ public class Chat implements Serializable {
         return true;
     }
 
+    /**
+     * 
+     * @param uuid
+     * @return message if there is a recent chat message, null if they've never spoken
+     */
+    public Message getMostRecentMessageFromUUID(UUID uuid){
+        Iterator<Message> it = chat.descendingIterator();
+        while (it.hasNext()) {
+            Message message = it.next();
+            if (message.getuserUUID() == uuid) {
+                return message;
+            }
+        }
+        return null;
+    }
     //Adding editing from Message class.
 
 
@@ -135,7 +151,9 @@ public class Chat implements Serializable {
             outputString += members.get(i).getHandle() +", ";
         }
         outputString += "\n";
-        //outputString += chat.getLast();
+        if (chat != null) {
+            outputString += chat.getLast();
+        }
         
         return outputString;
     }
