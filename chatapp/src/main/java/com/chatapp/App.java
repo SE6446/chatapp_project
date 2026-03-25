@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
@@ -126,7 +127,7 @@ public class App {
     public HashMap<UUID, Chat> getGroupChats(){
         HashMap<UUID, Chat> groupChats = new HashMap<>();
         for (UUID id : chats.keySet()) {
-            if (chats.get(id).isHost()) {
+            if (chats.get(id).isGroupChat()) {
                 groupChats.put(id, chats.get(id));
             }
         }
@@ -135,8 +136,8 @@ public class App {
 
     public Stack<Chat> getFeed(){
         Stack<Chat> feed = new Stack<>();
-        for (Chat chat : chats.toArray()) {
-           feed.add(chat);
+        for (Chat chat : chats.values()) {
+            feed.add(chat);
         }
         return feed;
     }
@@ -150,6 +151,35 @@ public class App {
             }
         }
         return matchedMessages;
+    }
+
+    public HashSet<Message> getMostRecentMessages(Contact contact){
+        HashSet<Message> messages = new HashSet<>();
+        UUID uuid = contact.getUUID();
+        //First we look for the DM
+        Chat chat = getChat(uuid);
+        messages.add(chat.getMostRecentMessageFromUUID(uuid));
+        //Then we look around GCs
+        for (Map.Entry<UUID,Chat> me : getGroupChatsWithContact(contact).entrySet()) {
+            if(me.getValue().getMembers().contains(contact)){
+                messages.add(me.getValue().getMostRecentMessageFromUUID(uuid));
+            }
+        }
+        if (messages.size() == 0) {
+            return null;
+        } else {
+            return messages;
+        }
+    }
+
+    public HashMap<UUID, Chat> getGroupChatsWithContact(Contact contact){
+        HashMap<UUID, Chat> groupChats = new HashMap<>();
+        for (UUID id : chats.keySet()) {
+            if (chats.get(id).isGroupChat() && chats.get(id).getMembers().contains(contact)) {
+                groupChats.put(id, chats.get(id));
+            }
+        }
+        return groupChats;
     }
 
     public void save(String fileString) throws Exception {

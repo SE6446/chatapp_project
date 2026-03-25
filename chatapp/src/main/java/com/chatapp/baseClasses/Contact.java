@@ -43,6 +43,11 @@ public class Contact implements Profile, Serializable {
     }
 
     @Override
+    public String toString() {
+        return "Name: " + this.name + "\nPhone Number: " + this.phoneNumberID;
+    }
+
+    @Override
     public UUID getUUID() {
         return uuid;
     }
