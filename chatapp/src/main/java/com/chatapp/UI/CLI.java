@@ -2,8 +2,14 @@ package com.chatapp.UI;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.UUID;
 //import java.util.UUID;
 import java.util.List;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.chatapp.App;
 import com.chatapp.baseClasses.*;
@@ -76,12 +82,13 @@ public class CLI {
                 
                 case 3:
                     // create group chat
+                    scanner.nextLine(); //eats the empty line
                     System.out.println("Input the phone numbers to include (comma seperated): ");
                     String numbersString = scanner.nextLine();
                     String[] numbers = numbersString.split(",");
                     ArrayList<Contact> contacts = new ArrayList<>();
                     for (String groupNumber : numbers) {
-                        Contact contact = app.getContactFromNumber(groupNumber);
+                        Contact contact = app.getContactFromNumber(Integer.parseInt(groupNumber));
                         contacts.add(contact);
                     }
                     app.createGroupChat(contacts);
@@ -91,8 +98,18 @@ public class CLI {
                     Chat selectedChat;
                     System.out.println(app.getChats());
                     System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
+                    System.out.println("If you want to access a group chat then please enter GC");
                     scanner.nextLine(); // to eat the empty line
                     String reply = scanner.nextLine();
+
+                    if (reply.equals("GC")){
+                        int counter = 0;
+                        for (Object values : app.getGroupChats().values()){
+                            counter++;
+                            System.out.println("Group Chat " + counter + ": " + values);
+                        }
+                        break;
+                    }
                     Contact contact = app.getContactFromNumber(Integer.parseInt(reply));
 
                     //try {
@@ -110,9 +127,7 @@ public class CLI {
                     }
                     chatPage(selectedChat);
                     break;
-                
-                case 5:
-                    break;
+                    
                 default:
                     System.out.println("That was not a valid option, please try again.");
                     break;
@@ -131,7 +146,7 @@ public class CLI {
             
                 flushCli();
                 chat.displayChat();
-                System.out.println("Write something to send, press enter with no text to exit bact to main menu:\n");
+                System.out.println("Write something to send, press enter with no text to exit back to main menu:\n");
                 String messageString = scanner.nextLine();
                 if (messageString != "") {
                     Message message = new Message(messageString, app.getProfile());
