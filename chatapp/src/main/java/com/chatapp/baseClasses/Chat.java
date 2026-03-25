@@ -91,7 +91,7 @@ public class Chat implements Serializable {
     }
 
     public Message sendMessage(Message message){ // .addFirst so that the most recent message will always appear at screen bottom
-        chat.addFirst(message);
+        chat.addLast(message);
         return message;
     }
 
