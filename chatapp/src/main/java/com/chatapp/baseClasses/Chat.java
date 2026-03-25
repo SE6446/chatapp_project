@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Chat implements Serializable {
     private LinkedList<Message> chat;
-    private ArrayList<Contact> members;
+    private ArrayList<Contact> members = new ArrayList<>();
     private boolean isHost = false;
     private boolean groupChat;
     //public Scanner s =  new Scanner(System.in); // Scanner should be a dependancy injection from the UI.

@@ -65,6 +65,7 @@ public class CLI {
                     break;
                     
                 case 2:
+                    scanner.nextLine(); // eat the empty line
                     System.out.println("Input the name of the contact: ");
                     String name = scanner.nextLine();
                     System.out.println("Input their number (no spaces)");

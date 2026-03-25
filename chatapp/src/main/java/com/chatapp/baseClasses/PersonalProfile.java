@@ -42,4 +42,11 @@ public class PersonalProfile implements Profile, Serializable {
         //contactsList = new ArrayList<Contact>();
     }
 
+    public PersonalProfile(){
+        phoneNumberID = 000;
+        this.name = "Name";
+        uuid = UUID.randomUUID();
+        //contactsList = new ArrayList<Contact>();
+    }
+
 }
