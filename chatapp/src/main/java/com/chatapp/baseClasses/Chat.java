@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Chat implements Serializable {
-    private LinkedList<Message> chat;
+    private LinkedList<Message> chat = new LinkedList<>();
     private ArrayList<Contact> members = new ArrayList<>();
     private boolean isHost = false;
     private boolean groupChat;
@@ -135,7 +135,7 @@ public class Chat implements Serializable {
             outputString += members.get(i).getHandle() +", ";
         }
         outputString += "\n";
-        outputString += chat.getLast();
+        //outputString += chat.getLast();
         
         return outputString;
     }
