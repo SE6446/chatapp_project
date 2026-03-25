@@ -127,16 +127,19 @@ public class CLI {
 
     static void chatPage(Chat chat){
         while (true) {
-            flushCli();
-            chat.displayChat();
-            System.out.println("Write something to send, press enter with no text to exit bact to main menu:\n");
-            String messageString = scanner.nextLine();
-            if (messageString != "") {
-                Message message = new Message(messageString, app.getProfile());
-                chat.sendMessage(message);
-            } else {
-                return; // This is the only exit condition.
-            }
+            
+                flushCli();
+                chat.displayChat();
+                System.out.println("Write something to send, press enter with no text to exit bact to main menu:\n");
+                String messageString = scanner.nextLine();
+                if (messageString != "") {
+                    Message message = new Message(messageString, app.getProfile());
+                    chat.sendMessage(message);
+                } else {
+                    return; // This is the only exit condition.
+                }
+        
+            
         }
     }
 
