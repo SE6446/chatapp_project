@@ -2,10 +2,16 @@ package com.chatapp.UI;
 
 import com.chatapp.App;
 import com.chatapp.baseClasses.*;
+import javax.swing.*;
 
 
 
 public class GUI {
-    static App app;
-        
+    
+    
+}
+
+class InnerGUI extends Thread {
+    
+    
 }
