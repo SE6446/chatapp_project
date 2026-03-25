@@ -11,7 +11,7 @@ public class GUI extends JFrame {
     private App app;
     
     private JTextField nameField;
-    private JTextField NumberField;
+    private JTextField numberField;
     private JButton createButton;
 
     public GUI(App app) {
@@ -24,6 +24,65 @@ public class GUI extends JFrame {
 
         initComponents();
         setVisible(true);
+    }
+
+    private void initComponents() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2, 10, 10));
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameField = new JTextField();
+
+        JLabel numberLabel = new JLabel("Phone Number:");
+        numberField = new JTextField();
+
+        createButton = new JButton("Create profile");
+
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        panel.add(nameLabel);
+        panel.add(nameField);
+        panel.add(numberLabel);
+        panel.add(numberField);
+        panel.add(new JLabel(""));
+        panel.add(createButton);
+
+        add(panel);
+
+        createButton.addActionListener(e -> createProfile());
+
+    }
+
+    private void createProfile() {
+        String name = nameField.getText().trim();
+        String numberText = numberField.getText().trim();
+
+        if (name.isEmpty() || numberText.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Fill in both fields.",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            int number = Integer.parseInt(numberText);
+            app.initAccount(name, number);
+
+            JOptionPane.showMessageDialog(this, "profile created successfuly!");
+
+            dispose();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "enter valid phone number."
+                ,"Input Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        App app = new App();
+        new GUI(app);
     }
 
     
