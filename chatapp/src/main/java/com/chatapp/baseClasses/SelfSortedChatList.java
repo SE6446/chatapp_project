@@ -13,12 +13,18 @@ public class SelfSortedChatList<K, V extends Chat> extends LinkedHashMap<K, V> {
         this.remove(key);
         this.put(key, value);
     }
+    /**
+     * @deprecated
+     * @return
+     */
     public Iterator<V> iterator(){
         LinkedList<V> list = (LinkedList<V>) this.values();
         return list.descendingIterator();
     }
-    
-    @SuppressWarnings("unchecked")
+    /**
+     * @deprecated
+     * @return
+     */
     public V[] toArray(){
         LinkedList<V> list = (LinkedList<V>) this.values();
         return (V[]) list.toArray();
@@ -27,10 +33,10 @@ public class SelfSortedChatList<K, V extends Chat> extends LinkedHashMap<K, V> {
     @Override
     public String toString() {
         String output = "";
-        Iterator<V> iterator = this.iterator();
-        while (iterator.hasNext()) {
-            output += iterator.next().toString() + "\n";
+        for (K key : this.keySet()) {
+            output += this.get(key).toString();
         }
+        
         return output;
     }
 
