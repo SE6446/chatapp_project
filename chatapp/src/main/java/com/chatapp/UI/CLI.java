@@ -110,7 +110,6 @@ public class CLI {
                     Chat selectedChat;
                     System.out.println(app.getChats());
                     System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
-                    System.out.println("If you want to access a group chat then please enter GC");
                     scanner.nextLine(); // to eat the empty line
                     String reply = scanner.nextLine();
                     Contact contact = app.getContactFromNumber(Integer.parseInt(reply));
@@ -134,9 +133,19 @@ public class CLI {
                 case 5:
                     // Group chats
                     int counter = 0;
-                    for (Object values : app.getGroupChats().values()){
+                    for (Chat values : app.getGroupChats().values()){
                         counter++;
                         System.out.println("Group Chat " + counter + ": " + values);
+                        scanner.nextLine(); // eats empty line
+                        System.out.println("Is this the group chat you want? Y/N:");
+                        String qAnswer = scanner.nextLine();
+
+                        if (qAnswer.equals("Y") || qAnswer.equals("y")){
+                            chatPage(values);
+                        }
+                        else{
+                            System.out.println("Either N was chosen or option was invalid");
+                        }
                     }
                     break;
                 case 6:
