@@ -13,4 +13,19 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    
+
+
+
+    <dependencies>
+
+    
+
+        <dependency>
+            <groupId>io.fusionauth</groupId>
+            <artifactId>java-http</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
 </project>

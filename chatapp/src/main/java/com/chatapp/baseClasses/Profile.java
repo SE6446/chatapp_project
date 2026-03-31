@@ -1,7 +1,9 @@
 package com.chatapp.baseClasses;
 
-public interface Profile {
+import java.util.UUID;
+
+public interface Profile{
     public int getphoneNumber();
     public String getHandle();
-    
+    public UUID getUUID();
 }
