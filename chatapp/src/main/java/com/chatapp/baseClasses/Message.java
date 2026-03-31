@@ -29,11 +29,11 @@ public class Message implements Serializable {
         
     }
 
-    public Message(String textInput){
+    public Message(String textInput, Profile name){
         text = textInput;
         timeSent = Instant.now();
         readByOtherUser = false;
-        senderName = "Placeholder"; // This can be set once profiles have been created and the current user can be seen.
+        senderName = name.getHandle(); // This can be set once profiles have been created and the current user can be seen.
     }
 
     // Makes user-inputted changes the text variable of the object.

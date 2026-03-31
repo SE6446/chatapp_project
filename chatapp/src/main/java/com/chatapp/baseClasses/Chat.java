@@ -7,32 +7,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Chat implements Serializable {
-    private LinkedList<Message> chat;
-    private ArrayList<Contact> members;
+    private LinkedList<Message> chat = new LinkedList<>();
+    private ArrayList<Contact> members = new ArrayList<>();
     private boolean isHost = false;
-    private boolean groupChat;
+    private boolean groupChat = false;
     //public Scanner s =  new Scanner(System.in); // Scanner should be a dependancy injection from the UI.
     //As it would be different from the cli to the GUI.
 
 
     public Chat(Collection<Contact> chatMembers) {
         members.addAll(chatMembers);
-        if (members.size() > 1){
-            groupChat = true;
-        }
-        else {
-            groupChat = false;
-        }
+        groupChat = false;
         isHost = true; // If instatiating a class like this, we can assume the instantiator is the host.
     }
 
     public Chat(Contact contact){
-        groupChat = false;
         isHost = true;
+        groupChat = false;
         members.add(contact);
     }
+
 
     /**
      * @deprecated What is this even for?
@@ -49,7 +46,7 @@ public class Chat implements Serializable {
 
     public void displayChat() {
         for (Message m : chat) {
-            System.out.println(m.getText());
+            System.out.println(m.getSenderName()+ ": "+m.getText());
         }
     }
 
@@ -57,12 +54,12 @@ public class Chat implements Serializable {
         return isHost;
     }
 
+    public void setGroupChatStatus(Boolean status){
+        groupChat = status;
+    }
+
     public boolean isGroupChat(){
-        if (members.size() > 2) {
-            groupChat = true;
-            return true;
-        }
-        return false;
+        return groupChat;
     }
 
     public ArrayList<? extends Profile> getMembers() {
@@ -91,7 +88,7 @@ public class Chat implements Serializable {
     }
 
     public Message sendMessage(Message message){ // .addFirst so that the most recent message will always appear at screen bottom
-        chat.addFirst(message);
+        chat.addLast(message);
         return message;
     }
 
@@ -115,6 +112,21 @@ public class Chat implements Serializable {
         return true;
     }
 
+    /**
+     * 
+     * @param uuid
+     * @return message if there is a recent chat message, null if they've never spoken
+     */
+    public Message getMostRecentMessageFromUUID(UUID uuid){
+        Iterator<Message> it = chat.descendingIterator();
+        while (it.hasNext()) {
+            Message message = it.next();
+            if (message.getuserUUID() == uuid) {
+                return message;
+            }
+        }
+        return null;
+    }
     //Adding editing from Message class.
 
 
@@ -135,7 +147,9 @@ public class Chat implements Serializable {
             outputString += members.get(i).getHandle() +", ";
         }
         outputString += "\n";
-        outputString += chat.getLast();
+        if (chat.size()!=0) {
+            outputString += chat.getLast();
+        }
         
         return outputString;
     }

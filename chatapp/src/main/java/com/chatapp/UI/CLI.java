@@ -2,8 +2,15 @@ package com.chatapp.UI;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
+import java.util.UUID;
 //import java.util.UUID;
 import java.util.List;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.chatapp.App;
 import com.chatapp.baseClasses.*;
@@ -36,8 +43,19 @@ public class CLI {
     }
     static void landingPage(){
         while (true){
+            System.out.println("Current feed");
+            Stack<Chat> feed = app.getFeed();
+            int limit;
+            if (feed.size() <= 3) {
+                limit = feed.size();
+            } else {
+                limit = 3;
+            }
+            for (int i = 0; i < limit; i++) {
+                System.out.println(feed.pop());
+            }
             System.out.println("Please enter the number for the command you wish to do.");
-            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats");
+            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats\n5 - Group Chats\n6 - View Contact");
             int answer = scanner.nextInt();
             
             switch (answer) {
@@ -65,6 +83,7 @@ public class CLI {
                     break;
                     
                 case 2:
+                    scanner.nextLine(); // eat the empty line
                     System.out.println("Input the name of the contact: ");
                     String name = scanner.nextLine();
                     System.out.println("Input their number (no spaces)");
@@ -75,12 +94,13 @@ public class CLI {
                 
                 case 3:
                     // create group chat
+                    scanner.nextLine(); //eats the empty line
                     System.out.println("Input the phone numbers to include (comma seperated): ");
                     String numbersString = scanner.nextLine();
                     String[] numbers = numbersString.split(",");
                     ArrayList<Contact> contacts = new ArrayList<>();
                     for (String groupNumber : numbers) {
-                        Contact contact = app.getContactFromNumber(groupNumber);
+                        Contact contact = app.getContactFromNumber(Integer.parseInt(groupNumber));
                         contacts.add(contact);
                     }
                     app.createGroupChat(contacts);
@@ -107,7 +127,35 @@ public class CLI {
                         System.out.println("You have no chats with this contact.");
                         break;
                     }
-                    selectedChat.displayChat();
+                    chatPage(selectedChat);
+                    break;
+                
+                case 5:
+                    // Group chats
+                    int counter = 0;
+                    for (Chat values : app.getGroupChats().values()){
+                        counter++;
+                        System.out.println("Group Chat " + counter + ": " + values);
+                        scanner.nextLine(); // eats empty line
+                        System.out.println("Is this the group chat you want? Y/N:");
+                        String qAnswer = scanner.nextLine();
+
+                        if (qAnswer.equals("Y") || qAnswer.equals("y")){
+                            chatPage(values);
+                        }
+                        else{
+                            System.out.println("Either N was chosen or option was invalid");
+                        }
+                    }
+                    break;
+                case 6:
+                    // view contact
+                    System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
+                    scanner.nextLine(); // to eat the empty line
+                    reply = scanner.nextLine();
+                    contact = app.getContactFromNumber(Integer.parseInt(reply));
+                    System.out.println("Contact: "+contact);
+                    System.out.println("Most Recent Messages:\n" + app.getMostRecentMessages(contact));
                     break;
                 default:
                     System.out.println("That was not a valid option, please try again.");
@@ -120,6 +168,28 @@ public class CLI {
         String nameString = scanner.nextLine();
         int number = Integer.parseInt(scanner.nextLine());
         app.addContact(nameString, number);
+    }
+
+    static void chatPage(Chat chat){
+        while (true) {
+            flushCli();
+            chat.displayChat();
+            System.out.println("Write something to send, press enter with no text to exit bact to main menu:\n");
+            String messageString = scanner.nextLine();
+            if (messageString != "") {
+                Message message = new Message(messageString, app.getProfile());
+                chat.sendMessage(message);
+            } else {
+                return; // This is the only exit condition.
+            }
+        
+            
+        }
+    }
+
+    protected static void flushCli(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
 }
