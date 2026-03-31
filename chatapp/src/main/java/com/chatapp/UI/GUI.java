@@ -4,6 +4,9 @@ import com.chatapp.App;
 import com.chatapp.baseClasses.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Stack;
 
 
 public class GUI extends JFrame {
@@ -80,6 +83,36 @@ public class GUI extends JFrame {
         }
     }
 
+    private void initLandingPage(){
+        JFrame mainFrame = new JFrame("Chat App");
+        mainFrame.setSize(1280,720);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.setVisible(true);
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        JLabel title = new JLabel("Chat App");
+        title.setHorizontalAlignment(JLabel.CENTER);
+
+        JButton profileButton = new JButton("Profile");
+
+        topPanel.add(title, BorderLayout.CENTER);
+        topPanel.add(profileButton, BorderLayout.EAST);
+
+        mainFrame.add(topPanel, BorderLayout.NORTH);
+
+        //feed
+        DefaultListModel<Chat> feedModel = new DefaultListModel<>();
+        JList<Chat> feedList = new JList<>(feedModel);
+        JScrollPane feedScroll = new JScrollPane(feedList);
+        feedScroll.setPreferredSize(new Dimension(400,0));
+        mainFrame.add(feedScroll, BorderLayout.WEST);
+
+        //adding more soon going to shop lol
+
+
+    }
     public static void main(String[] args) {
         App app = new App();
         new GUI(app);
