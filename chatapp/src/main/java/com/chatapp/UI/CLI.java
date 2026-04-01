@@ -295,6 +295,14 @@ public class CLI {
         }
     }
 
+    static void deleteFromGroupChats(Contact contact){
+        HashMap<UUID,Chat> groupChats = app.getGroupChatsWithContact(contact);
+        for (UUID id : groupChats.keySet()) {
+            groupChats.get(id).kickMember(app.getProfile(), contact);
+        }
+        
+    }
+
     
 
 }

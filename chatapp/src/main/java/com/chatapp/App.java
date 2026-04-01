@@ -146,18 +146,26 @@ public class App {
     }
     
     public void deleteChat(Chat targetChat) {
+        UUID idToDelete = null;
         for (UUID id : chats.keySet()) {
             if (chats.get(id).equals(targetChat)) {
-                  chats.remove(id);  
+                idToDelete = id; 
             }
+        }
+        if (idToDelete != null) {
+            chats.remove(idToDelete);
         }
     }
 
     public void deleteContact(Contact targetContacts) {
+        UUID idToDelete = null;
         for (UUID id : contacts.keySet()) {
             if (contacts.get(id).equals(targetContacts)) {
-                  contacts.remove(id);  
+                idToDelete = id;
             }
+        }
+        if (idToDelete != null) {
+            chats.remove(idToDelete);
         }
     }
 
