@@ -18,11 +18,19 @@ public class App {
     //* */ As UUIDs are essentially random and have no innate ordering. But if we used a simpler identifier than maybe.
     //* */ Let me know what you think - Archie
     private SelfSortedChatList<UUID, Chat> chats;
+    public void setChats(SelfSortedChatList<UUID, Chat> chats) {
+        this.chats = chats;
+    }
+
     public SelfSortedChatList<UUID, Chat> getChats() {
         return chats;
     }
 
     private HashMap<UUID, Contact> contacts;
+    public void setContacts(HashMap<UUID, Contact> contacts) {
+        this.contacts = contacts;
+    }
+
     public HashMap<UUID, Contact> getContacts() {
         return contacts;
     }
@@ -30,6 +38,10 @@ public class App {
     private PersonalProfile profile;
     
     
+    public void setProfile(PersonalProfile profile) {
+        this.profile = profile;
+    }
+
     public PersonalProfile getProfile() {
         return profile;
     }
@@ -109,7 +121,11 @@ public class App {
         return null;
 
     }
-
+    /**
+     * @deprecated
+     * @param number
+     * @return
+     */
     public Contact getContactFromNumber(String number){
         ArrayList<Contact> contactValues = (ArrayList<Contact>) contacts.values(); //What the fuck
         for (Contact contact : contactValues) {
