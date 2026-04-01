@@ -21,8 +21,8 @@ import com.chatapp.baseClasses.*;
  */
 
 public class CLI {
-    static App app;
     static Scanner scanner = new Scanner(System.in);
+    static App app;
     public static void main(String[] args) {
         if (args.length == 0){
             app = new App();
@@ -55,7 +55,7 @@ public class CLI {
                 System.out.println(feed.pop());
             }
             System.out.println("Please enter the number for the command you wish to do.");
-            System.out.println("1 - Edit Profile\n2 - Manage Contacts\n3 - Manage Chats");
+            System.out.println("1 - Edit Profile\n2 - Manage Contacts\n3 - Manage Chats\n4 - Load\n5 - Save");
             int answer = scanner.nextInt();
             
             switch (answer) {
@@ -234,6 +234,18 @@ public class CLI {
                     else{
                         System.out.println("That was not a valid option");
                     }
+                case 4:
+                    System.out.println("Please input the filename of the file you're trying to load");
+                    scanner.nextLine();
+                    String reply = scanner.nextLine();
+                    load(reply);
+                    break;
+                case 5:
+                    System.out.println("Please input the filename of the file you're trying to load");
+                    scanner.nextLine();
+                    reply = scanner.nextLine();
+                    save(reply);
+                    break;
                 default:
                     System.out.println("That was not a valid option, please try again.");
                     break;
@@ -258,9 +270,7 @@ public class CLI {
                 chat.sendMessage(message);
             } else {
                 return; // This is the only exit condition.
-            }
-        
-            
+            }            
         }
     }
 
@@ -268,5 +278,23 @@ public class CLI {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
+    static void save(String fileName){
+        System.out.println("Saved to "+ fileName); // I won't add extension shenanigans, be responsible
+        SaveState saveState = new SaveState(app);
+        saveState.save(fileName);
+    }
+
+    static void load(String fileName){
+        SaveState saveState = new SaveState(fileName);
+        try {
+            app = new App(saveState);
+            System.out.println("Hellp");
+        } catch (Exception e) {
+            System.err.println("There was an exception: "+ e.getMessage());
+        }
+    }
+
+    
 
 }
