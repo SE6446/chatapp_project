@@ -55,7 +55,7 @@ public class CLI {
                 System.out.println(feed.pop());
             }
             System.out.println("Please enter the number for the command you wish to do.");
-            System.out.println("1 - Edit Profile\n2 - Manage Contacts\n3 - create (group) chat\n4 - view chats\n5 - Group Chats");
+            System.out.println("1 - Edit Profile\n2 - Manage Contacts\n3 - Manage Chats");
             int answer = scanner.nextInt();
             
             switch (answer) {
@@ -83,6 +83,7 @@ public class CLI {
                     break;
                     
                 case 2:
+                    // Contact Management
                     System.out.println("What do you wish to do?");
                     System.out.println("1 - Add Contact\n2 - View Contact\n3 - Remove Contact");
                     answer = scanner.nextInt();
@@ -115,107 +116,124 @@ public class CLI {
                         String stringReply = scanner.nextLine();
                         app.deleteChat(app.getChatFromContact(app.getContactFromNumber(Integer.parseInt(stringReply))));
                         app.deleteContact(app.getContactFromNumber(Integer.parseInt(stringReply)));
+                        
+                    }
+                    else{
+                        System.out.println("That was not a valid option");
                     }
                     break;
                 
                 case 3:
-                    // create group chat
-                    scanner.nextLine(); //eats the empty line
-                    System.out.println("Input the phone numbers to include (comma seperated): ");
-                    String numbersString = scanner.nextLine();
+                    // Chat Management
+                    System.out.println("What do you wish to do?");
+                    System.out.println("1 - Create Chat\n2 - Enter Chat\n3 - Delete Chat");
+                    answer = scanner.nextInt();
 
-                    if (numbersString.length() > 1){
-                        // group chats
-                        String[] numbers = numbersString.split(",");
-                        ArrayList<Contact> contacts = new ArrayList<>();
-                        for (String groupNumber : numbers) {
-                            Contact contact = app.getContactFromNumber(Integer.parseInt(groupNumber));
-                            contacts.add(contact);
+                    if (answer == 1){
+                        // create
+                        System.out.println("1 - Create 1-to-1 Chat\n2 - Create Group Chat");
+                        answer = scanner.nextInt();
+
+                        String numbersString = "Placeholder";
+                        scanner.nextLine(); //eats the empty line
+
+                        if (answer == 1){
+                            // 1-to-1
+                            // normal chats
+                            
+                            System.out.println("Enter the phone number of the person you with to contact: ");
+                            numbersString = scanner.nextLine();
+                            Contact desiredContact = app.getContactFromNumber(Integer.parseInt(numbersString));
+                            Chat p2pChat = new Chat(desiredContact);
+                            app.addChatWithContact(p2pChat, desiredContact);
+                        }
+                        else if (answer == 2){
+                            // Group
+                            System.out.println("Input the phone numbers to include in the group chat (comma seperated without spaces): ");
+                            numbersString = scanner.nextLine();
+                            String[] numbers = numbersString.split(",");
+                            ArrayList<Contact> contacts = new ArrayList<>();
+                            for (String groupNumber : numbers) {
+                                Contact contact = app.getContactFromNumber(Integer.parseInt(groupNumber));
+                                contacts.add(contact);
                         }
                         app.createGroupChat(contacts);
+                        }
+                        else{
+                            System.out.println("That was not a valid option");
+                        }
                     }
-                    else{
-                        // normal chats
-                        Contact desiredContact = app.getContactFromNumber(Integer.parseInt(numbersString));
-                        Chat p2pChat = new Chat(desiredContact);
-                        app.addChatWithContact(p2pChat, desiredContact);
-                    }
-                    break;
+                    else if (answer == 2){
+                        // enter 
 
-                case 4:
-                    Chat selectedChat;
-                    System.out.println(app.getChats());
-                    System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
-                    scanner.nextLine(); // to eat the empty line
-                    String reply = scanner.nextLine();
-                    Contact contact = app.getContactFromNumber(Integer.parseInt(reply));
+                        System.out.println("1 - Enter 1-to-1 Chat\n2 - Enter Group Chat");
+                        answer = scanner.nextInt();
+                        
+                        if (answer == 1 ){
+                            Chat selectedChat;
+                            System.out.println(app.getChats());
+                            System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
+                            scanner.nextLine(); // to eat the empty line
+                            String reply = scanner.nextLine();
+                            Contact contact = app.getContactFromNumber(Integer.parseInt(reply));
 
-                    //try {
-                    //    UUID.fromString(reply);
-                    //} catch (Exception e) {
-                    //    System.out.println("You have not entered a valid ID, please try something else.");
-                    //    break;
-                    //}
+                            //try {
+                            //    UUID.fromString(reply);
+                            //} catch (Exception e) {
+                            //    System.out.println("You have not entered a valid ID, please try something else.");
+                            //    break;
+                            //}
 
-                    
-                    selectedChat = app.getChatFromContact(contact);
-                    if (selectedChat == null) {
-                        System.out.println("You have no chats with this contact.");
-                        break;
-                    }
-
-                    System.out.println("1 - Enter Chat\n2 - Delete Chat");
-                    //scanner.nextLine(); // to eat the empty line
-                    reply = scanner.nextLine();
-                    
-                    if (reply.equals("1")){
-                        chatPage(selectedChat);
-                    }
-                    else if (reply.equals("2")){
-                        app.deleteChat(selectedChat);
-                    }
-                    else{
-                        System.out.println("That was not a valid option.");
-                    }
-                    break;
-                
-                case 5:
-                    // Group chats
-                    int counter = 0;
-                    for (Chat values : app.getGroupChats().values()){
-                        counter++;
-                        System.out.println("Group Chat " + counter + ": " + values);
-                        scanner.nextLine(); // eats empty line
-                        System.out.println("Is this the group chat you want? Y/N:");
-                        String qAnswer = scanner.nextLine();
-
-                        if (qAnswer.equals("Y") || qAnswer.equals("y")){
-                            System.out.println("1 - Open Group Chat\n2 - Delete Group Chat");
-                            qAnswer = scanner.nextLine();
-                            if (qAnswer.equals("1")){
-                                chatPage(values);
+                            
+                            selectedChat = app.getChatFromContact(contact);
+                            if (selectedChat == null) {
+                                System.out.println("You have no chats with this contact.");
+                                break;
                             }
-                            else if (qAnswer.equals("2")){
-                                app.deleteChat(values);
-                            }
-                            else{
-                                System.out.println("That was not a valid option");
+
+                            chatPage(selectedChat);
+                        }
+                        else if (answer == 2){
+                            // Group chats
+                            int counter = 0;
+                            for (Chat values : app.getGroupChats().values()){
+                                counter++;
+                                System.out.println("Group Chat " + counter + ": " + values);
+                                scanner.nextLine(); // eats empty line
+                                System.out.println("Is this the group chat you want? Y/N:");
+                                String qAnswer = scanner.nextLine();
+
+                                if (qAnswer.equals("Y") || qAnswer.equals("y")){
+                                    System.out.println("1 - Open Group Chat\n2 - Delete Group Chat");
+                                    qAnswer = scanner.nextLine();
+                                    if (qAnswer.equals("1")){
+                                        chatPage(values);
+                                    }
+                                    else if (qAnswer.equals("2")){
+                                        app.deleteChat(values);
+                                    }
+                                    else{
+                                        System.out.println("That was not a valid option");
+                                    }
+                                }
+                                else{
+                                    System.out.println("Either N was chosen or option was invalid");
+                                }
                             }
                         }
                         else{
-                            System.out.println("Either N was chosen or option was invalid");
+                            System.out.println("That was not a valid option");
                         }
                     }
-                    break;
-                case 6:
-                    // manage contact
-                    System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
-                    scanner.nextLine(); // to eat the empty line
-                    reply = scanner.nextLine();
-                    contact = app.getContactFromNumber(Integer.parseInt(reply));
-                    System.out.println("Contact: "+contact);
-                    System.out.println("Most Recent Messages:\n" + app.getMostRecentMessages(contact)+ "\n");
-                    break;
+                    else if (answer == 3){
+                        System.out.println("Please enter the phone number of the user that you want to delete your chat with: ");
+                        scanner.nextLine(); // to eat the empty line
+                        String reply = scanner.nextLine();
+                        app.deleteChat(app.getChatFromContact(app.getContactFromNumber(Integer.parseInt(reply))));
+                    }
+                    else{
+                        System.out.println("That was not a valid option");
+                    }
                 default:
                     System.out.println("That was not a valid option, please try again.");
                     break;
