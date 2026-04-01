@@ -121,7 +121,11 @@ public class App {
         return null;
 
     }
-
+    /**
+     * @deprecated
+     * @param number
+     * @return
+     */
     public Contact getContactFromNumber(String number){
         ArrayList<Contact> contactValues = (ArrayList<Contact>) contacts.values(); //What the fuck
         for (Contact contact : contactValues) {
