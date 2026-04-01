@@ -106,6 +106,7 @@ public class GUI extends JFrame {
         mainFrame.setSize(1280,720);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLayout(new BorderLayout());
+        mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -121,16 +122,33 @@ public class GUI extends JFrame {
         mainFrame.add(topPanel, BorderLayout.NORTH);
 
         //feed
-        DefaultListModel<Chat> feedModel = new DefaultListModel<>();
-        JList<Chat> feedList = new JList<>(feedModel);
+        DefaultListModel<String> feedModel = new DefaultListModel<>();
+        JList<String> feedList = new JList<>(feedModel);
         JScrollPane feedScroll = new JScrollPane(feedList);
         feedScroll.setPreferredSize(new Dimension(400,0));
         mainFrame.add(feedScroll, BorderLayout.WEST);
 
-        //adding more soon going to shop lol
+        //add chats to feed
+        Stack<Chat> feed = (Stack<Chat>) app.getFeed().clone();
+        
 
+        if (feed.isEmpty()) {
+            feedModel.addElement("No chats yet");
+        } else {
+            int limit;
+            if (feed.size() <= 3) {
+                limit = feed.size();
+            } else {
+                limit = 3;
+            }
 
+            for (int i = 0; i < limit; i++) {
+                Chat chat = feed.pop();
+                feedModel.addElement(chat.toString());
+            }
+        }
     }
+
     public static void main(String[] args) {
         App app;
         boolean needsProfileCreation;
@@ -146,7 +164,7 @@ public class GUI extends JFrame {
             return;
         }
         new GUI(app, needsProfileCreation);
-    }
+    }   
 
     
     
