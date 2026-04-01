@@ -164,7 +164,17 @@ public class CLI {
                         String qAnswer = scanner.nextLine();
 
                         if (qAnswer.equals("Y") || qAnswer.equals("y")){
-                            chatPage(values);
+                            System.out.println("1 - Open Group Chat\n2 - Delete Group Chat");
+                            qAnswer = scanner.nextLine();
+                            if (qAnswer.equals("1")){
+                                chatPage(values);
+                            }
+                            else if (qAnswer.equals("2")){
+                                app.deleteChat(values);
+                            }
+                            else{
+                                System.out.println("That was not a valid option");
+                            }
                         }
                         else{
                             System.out.println("Either N was chosen or option was invalid");
