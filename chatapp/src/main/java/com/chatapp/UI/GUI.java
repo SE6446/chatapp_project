@@ -29,6 +29,22 @@ public class GUI extends JFrame {
         setVisible(true);
     }
 
+    public GUI(App app, boolean needsProfileCreation) {
+        this.app = app;
+
+        setTitle("Chat App");
+        setSize(350, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        initComponents();
+        if (needsProfileCreation) {
+            setVisible(true);
+        } else {
+            initLandingPage();
+        }
+    }
+
     private void initComponents() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2, 10, 10));
@@ -75,12 +91,14 @@ public class GUI extends JFrame {
             JOptionPane.showMessageDialog(this, "profile created successfuly!");
 
             dispose();
+            initLandingPage();
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "enter valid phone number."
                 ,"Input Error",
                 JOptionPane.ERROR_MESSAGE);
         }
+        
     }
 
     private void initLandingPage(){
@@ -114,8 +132,20 @@ public class GUI extends JFrame {
 
     }
     public static void main(String[] args) {
-        App app = new App();
-        new GUI(app);
+        App app;
+        boolean needsProfileCreation;
+
+        if (args.length == 0) {
+            app = new App(); 
+            needsProfileCreation = true;
+        } else if (args.length == 1) {
+            app = new App(args[0]);
+            needsProfileCreation = false;
+        } else {
+            System.out.println("Invalid arguments. Usage: java GUI [optional: saveFileName]");
+            return;
+        }
+        new GUI(app, needsProfileCreation);
     }
 
     
