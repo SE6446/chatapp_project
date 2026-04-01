@@ -110,7 +110,7 @@ public class CLI {
                     }
                     else{
                         // normal chats
-                        Contact desiredContact = app.getContactFromNumber(numbersString);
+                        Contact desiredContact = app.getContactFromNumber(Integer.parseInt(numbersString));
                         Chat p2pChat = new Chat(desiredContact);
                         app.addChatWithContact(p2pChat, desiredContact);
                     }
