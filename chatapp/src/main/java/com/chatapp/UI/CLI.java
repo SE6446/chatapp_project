@@ -21,8 +21,8 @@ import com.chatapp.baseClasses.*;
  */
 
 public class CLI {
-    static App app;
     static Scanner scanner = new Scanner(System.in);
+    static App app;
     public static void main(String[] args) {
         if (args.length == 0){
             app = new App();
@@ -162,11 +162,13 @@ public class CLI {
                     scanner.nextLine();
                     reply = scanner.nextLine();
                     load(reply);
+                    break;
                 case 8:
                     System.out.println("Please input the filename of the file you're trying to load");
                     scanner.nextLine();
                     reply = scanner.nextLine();
                     save(reply);
+                    break;
                 default:
                     System.out.println("That was not a valid option, please try again.");
                     break;
@@ -207,7 +209,13 @@ public class CLI {
     }
 
     static void load(String fileName){
-        app = new App(fileName);
+        SaveState saveState = new SaveState(fileName);
+        try {
+            app = new App(saveState);
+            System.out.println("Hellp");
+        } catch (Exception e) {
+            System.err.println("There was an exception: "+ e.getMessage());
+        }
     }
 
     
