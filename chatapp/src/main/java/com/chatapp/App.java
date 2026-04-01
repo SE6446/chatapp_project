@@ -137,6 +137,14 @@ public class App {
         }
     }
 
+    public void deleteContact(Contact targetContacts) {
+        for (UUID id : contacts.keySet()) {
+            if (contacts.get(id).equals(targetContacts)) {
+                  contacts.remove(id);  
+            }
+        }
+    }
+
     public HashMap<UUID, Chat> getGroupChats(){
         HashMap<UUID, Chat> groupChats = new HashMap<>();
         for (UUID id : chats.keySet()) {

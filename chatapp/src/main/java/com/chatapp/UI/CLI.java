@@ -55,7 +55,7 @@ public class CLI {
                 System.out.println(feed.pop());
             }
             System.out.println("Please enter the number for the command you wish to do.");
-            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats\n5 - Group Chats\n6 - Manage Contacts");
+            System.out.println("1 - Edit Profile\n2 - Manage Contacts\n3 - create (group) chat\n4 - view chats\n5 - Group Chats");
             int answer = scanner.nextInt();
             
             switch (answer) {
@@ -83,13 +83,39 @@ public class CLI {
                     break;
                     
                 case 2:
-                    scanner.nextLine(); // eat the empty line
-                    System.out.println("Input the name of the contact: ");
-                    String name = scanner.nextLine();
-                    System.out.println("Input their number (no spaces)");
-                    String number = scanner.nextLine();
-                    number = number.replaceAll("\\s","");
-                    app.addContact(name, Integer.parseInt(number));
+                    System.out.println("What do you wish to do?");
+                    System.out.println("1 - Add Contact\n2 - View Contact\n3 - Remove Contact");
+                    answer = scanner.nextInt();
+
+                    if (answer == 1){
+                        // add
+                        scanner.nextLine(); // eat the empty line
+                        System.out.println("Input the name of the contact: ");
+                        String name = scanner.nextLine();
+                        System.out.println("Input their number (no spaces)");
+                        String number = scanner.nextLine();
+                        number = number.replaceAll("\\s","");
+                        app.addContact(name, Integer.parseInt(number));
+                    }
+                    else if (answer == 2){
+                        // view
+                        Contact desiredContact;
+                        System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
+                        scanner.nextLine(); // to eat the empty line
+                        String stringReply = scanner.nextLine();
+                        desiredContact = app.getContactFromNumber(Integer.parseInt(stringReply));
+                        System.out.println("Contact: "+ desiredContact);
+                        System.out.println("Most Recent Messages:\n" + app.getMostRecentMessages(desiredContact)+ "\n");
+                    }
+                    else if (answer == 3){
+                        // delete
+                        // deleting a contact also deletes associated 1-1 chats
+                        System.out.println("Please enter the phone number of the user that you want to remove from your contacts: ");
+                        scanner.nextLine(); // to eat the empty line
+                        String stringReply = scanner.nextLine();
+                        app.deleteChat(app.getChatFromContact(app.getContactFromNumber(Integer.parseInt(stringReply))));
+                        app.deleteContact(app.getContactFromNumber(Integer.parseInt(stringReply)));
+                    }
                     break;
                 
                 case 3:
