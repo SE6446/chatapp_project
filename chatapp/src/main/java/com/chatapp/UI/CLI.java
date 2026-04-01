@@ -55,7 +55,7 @@ public class CLI {
                 System.out.println(feed.pop());
             }
             System.out.println("Please enter the number for the command you wish to do.");
-            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats\n5 - Group Chats\n6 - View Contact");
+            System.out.println("1 - Edit Profile\n2 - Add Contact\n3 - create (group) chat\n4 - view chats\n5 - Group Chats\n6 - Manage Contacts");
             int answer = scanner.nextInt();
             
             switch (answer) {
@@ -97,13 +97,23 @@ public class CLI {
                     scanner.nextLine(); //eats the empty line
                     System.out.println("Input the phone numbers to include (comma seperated): ");
                     String numbersString = scanner.nextLine();
-                    String[] numbers = numbersString.split(",");
-                    ArrayList<Contact> contacts = new ArrayList<>();
-                    for (String groupNumber : numbers) {
-                        Contact contact = app.getContactFromNumber(Integer.parseInt(groupNumber));
-                        contacts.add(contact);
+
+                    if (numbersString.length() > 1){
+                        // group chats
+                        String[] numbers = numbersString.split(",");
+                        ArrayList<Contact> contacts = new ArrayList<>();
+                        for (String groupNumber : numbers) {
+                            Contact contact = app.getContactFromNumber(Integer.parseInt(groupNumber));
+                            contacts.add(contact);
+                        }
+                        app.createGroupChat(contacts);
                     }
-                    app.createGroupChat(contacts);
+                    else{
+                        // normal chats
+                        Contact desiredContact = app.getContactFromNumber(numbersString);
+                        Chat p2pChat = new Chat(desiredContact);
+                        app.addChatWithContact(p2pChat, desiredContact);
+                    }
                     break;
 
                 case 4:
@@ -127,7 +137,20 @@ public class CLI {
                         System.out.println("You have no chats with this contact.");
                         break;
                     }
-                    chatPage(selectedChat);
+
+                    System.out.println("1 - Enter Chat\n2 - Delete Chat");
+                    //scanner.nextLine(); // to eat the empty line
+                    reply = scanner.nextLine();
+                    
+                    if (reply.equals("1")){
+                        chatPage(selectedChat);
+                    }
+                    else if (reply.equals("2")){
+                        app.deleteChat(selectedChat);
+                    }
+                    else{
+                        System.out.println("That was not a valid option.");
+                    }
                     break;
                 
                 case 5:
@@ -149,13 +172,13 @@ public class CLI {
                     }
                     break;
                 case 6:
-                    // view contact
+                    // manage contact
                     System.out.println("Please enter the phone number of the user that you want to see that chat with: ");
                     scanner.nextLine(); // to eat the empty line
                     reply = scanner.nextLine();
                     contact = app.getContactFromNumber(Integer.parseInt(reply));
                     System.out.println("Contact: "+contact);
-                    System.out.println("Most Recent Messages:\n" + app.getMostRecentMessages(contact));
+                    System.out.println("Most Recent Messages:\n" + app.getMostRecentMessages(contact)+ "\n");
                     break;
                 default:
                     System.out.println("That was not a valid option, please try again.");

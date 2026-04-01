@@ -78,6 +78,10 @@ public class App {
         return id;
     }
 
+    public void addChatWithContact(Chat chat, Contact contact){
+        chats.put(contact.getUUID(), chat);
+    }
+
     public Contact getContact(UUID id){
         return contacts.get(id);
     }
@@ -125,6 +129,14 @@ public class App {
         return chats.get(uuid);
     }
     
+    public void deleteChat(Chat targetChat) {
+        for (UUID id : chats.keySet()) {
+            if (chats.get(id).equals(targetChat)) {
+                  chats.remove(id);  
+            }
+        }
+    }
+
     public HashMap<UUID, Chat> getGroupChats(){
         HashMap<UUID, Chat> groupChats = new HashMap<>();
         for (UUID id : chats.keySet()) {
