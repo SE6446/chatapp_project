@@ -176,15 +176,7 @@ public class CLI {
                             scanner.nextLine(); // to eat the empty line
                             String reply = scanner.nextLine();
                             Contact contact = app.getContactFromNumber(Integer.parseInt(reply));
-
-                            //try {
-                            //    UUID.fromString(reply);
-                            //} catch (Exception e) {
-                            //    System.out.println("You have not entered a valid ID, please try something else.");
-                            //    break;
-                            //}
-
-                            
+                         
                             selectedChat = app.getChatFromContact(contact);
                             if (selectedChat == null) {
                                 System.out.println("You have no chats with this contact.");
@@ -234,6 +226,7 @@ public class CLI {
                     else{
                         System.out.println("That was not a valid option");
                     }
+                    break;
                 case 4:
                     System.out.println("Please input the filename of the file you're trying to load");
                     scanner.nextLine();
