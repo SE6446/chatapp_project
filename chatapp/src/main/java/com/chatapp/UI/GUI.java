@@ -16,6 +16,8 @@ public class GUI extends JFrame {
     private JTextField nameField;
     private JTextField numberField;
     private JButton createButton;
+    private JPanel centerPanel;
+    private CardLayout cardLayout;
 
     public GUI(App app) {
         this.app = app;
@@ -102,6 +104,7 @@ public class GUI extends JFrame {
     }
 
     private void initLandingPage(){
+        cardLayout = new CardLayout();
         JFrame mainFrame = new JFrame("Chat App");
         mainFrame.setSize(1280,720);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,6 +118,9 @@ public class GUI extends JFrame {
         title.setHorizontalAlignment(JLabel.CENTER);
 
         JButton profileButton = new JButton("Profile");
+        profileButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "PROFILE");
+        });
 
         topPanel.add(title, BorderLayout.CENTER);
         topPanel.add(profileButton, BorderLayout.EAST);
@@ -147,6 +153,26 @@ public class GUI extends JFrame {
                 feedModel.addElement(chat.toString());
             }
         }
+
+        //views/ view switching
+        JPanel centerPanel = new JPanel(cardLayout);
+
+        JPanel defaultPanel = new JPanel(new BorderLayout());
+        defaultPanel.add(new JLabel("Select a Chat to Start.", JLabel.CENTER), BorderLayout.CENTER);
+
+        JPanel chatPanel = new JPanel(new BorderLayout());
+        chatPanel.add(new JLabel("Chat view.", JLabel.CENTER), BorderLayout.CENTER);
+
+        JPanel profilePanel = new JPanel(new BorderLayout());
+        profilePanel.add(new JLabel("Profile view.", JLabel.CENTER), BorderLayout.CENTER);
+
+        centerPanel.add(defaultPanel, "DEFAULT");
+        centerPanel.add(chatPanel, "CHAT");
+        centerPanel.add(profilePanel, "PROFILE");
+
+        mainFrame.add(centerPanel, BorderLayout.CENTER);
+
+        cardLayout.show(centerPanel, "DEFAULT");
     }
 
     public static void main(String[] args) {
