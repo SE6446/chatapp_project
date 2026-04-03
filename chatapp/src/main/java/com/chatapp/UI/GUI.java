@@ -93,7 +93,7 @@ public class GUI extends JFrame {
             JOptionPane.showMessageDialog(this, "profile created successfuly!");
 
             dispose();
-            initLandingPage();
+            SwingUtilities.invokeLater(() -> initLandingPage());
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "enter valid phone number."
