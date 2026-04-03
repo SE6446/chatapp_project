@@ -18,11 +18,19 @@ public class App {
     //* */ As UUIDs are essentially random and have no innate ordering. But if we used a simpler identifier than maybe.
     //* */ Let me know what you think - Archie
     private SelfSortedChatList<UUID, Chat> chats;
+    public void setChats(SelfSortedChatList<UUID, Chat> chats) {
+        this.chats = chats;
+    }
+
     public SelfSortedChatList<UUID, Chat> getChats() {
         return chats;
     }
 
     private HashMap<UUID, Contact> contacts;
+    public void setContacts(HashMap<UUID, Contact> contacts) {
+        this.contacts = contacts;
+    }
+
     public HashMap<UUID, Contact> getContacts() {
         return contacts;
     }
@@ -30,6 +38,10 @@ public class App {
     private PersonalProfile profile;
     
     
+    public void setProfile(PersonalProfile profile) {
+        this.profile = profile;
+    }
+
     public PersonalProfile getProfile() {
         return profile;
     }
@@ -78,6 +90,10 @@ public class App {
         return id;
     }
 
+    public void addChatWithContact(Chat chat, Contact contact){
+        chats.put(contact.getUUID(), chat);
+    }
+
     public Contact getContact(UUID id){
         return contacts.get(id);
     }
@@ -109,7 +125,11 @@ public class App {
         return null;
 
     }
-
+    /**
+     * @deprecated
+     * @param number
+     * @return
+     */
     public Contact getContactFromNumber(String number){
         ArrayList<Contact> contactValues = (ArrayList<Contact>) contacts.values(); //What the fuck
         for (Contact contact : contactValues) {
@@ -125,6 +145,30 @@ public class App {
         return chats.get(uuid);
     }
     
+    public void deleteChat(Chat targetChat) {
+        UUID idToDelete = null;
+        for (UUID id : chats.keySet()) {
+            if (chats.get(id).equals(targetChat)) {
+                idToDelete = id; 
+            }
+        }
+        if (idToDelete != null) {
+            chats.remove(idToDelete);
+        }
+    }
+
+    public void deleteContact(Contact targetContacts) {
+        UUID idToDelete = null;
+        for (UUID id : contacts.keySet()) {
+            if (contacts.get(id).equals(targetContacts)) {
+                idToDelete = id;
+            }
+        }
+        if (idToDelete != null) {
+            chats.remove(idToDelete);
+        }
+    }
+
     public HashMap<UUID, Chat> getGroupChats(){
         HashMap<UUID, Chat> groupChats = new HashMap<>();
         for (UUID id : chats.keySet()) {
