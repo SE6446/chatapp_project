@@ -113,6 +113,7 @@ public class GUI extends JFrame {
         mainFrame.setVisible(true);
 
         JPanel topPanel = new JPanel(new BorderLayout());
+        JPanel centerPanel = new JPanel(cardLayout);
 
         JLabel title = new JLabel("Chat App");
         title.setHorizontalAlignment(JLabel.CENTER);
@@ -155,7 +156,6 @@ public class GUI extends JFrame {
         }
 
         //views/ view switching
-        JPanel centerPanel = new JPanel(cardLayout);
 
         JPanel defaultPanel = new JPanel(new BorderLayout());
         defaultPanel.add(new JLabel("Select a Chat to Start.", JLabel.CENTER), BorderLayout.CENTER);
