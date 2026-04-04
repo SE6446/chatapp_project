@@ -198,7 +198,19 @@ public class GUI extends JFrame {
         JList<String> feedList = new JList<>(feedModel);
         JScrollPane feedScroll = new JScrollPane(feedList);
         feedScroll.setPreferredSize(new Dimension(400,0));
-        mainFrame.add(feedScroll, BorderLayout.WEST);
+
+        JPanel feedPanel = new JPanel(new BorderLayout());
+        JPanel topFeedPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton addContactButton = new JButton("Add Contact");
+        JButton addGroupChatButton = new JButton("New GroupChat");
+        topFeedPanel.add(addContactButton);
+        topFeedPanel.add(addGroupChatButton);
+
+        feedPanel.add(topFeedPanel, BorderLayout.NORTH);
+        feedPanel.add(feedScroll, BorderLayout.CENTER);
+        feedPanel.setPreferredSize(new Dimension(400,0));
+
+        mainFrame.add(feedPanel, BorderLayout.WEST);
 
         //add chats to feed
         Stack<Chat> feed = (Stack<Chat>) app.getFeed().clone();
