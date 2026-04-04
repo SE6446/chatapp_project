@@ -104,6 +104,7 @@ public class GUI extends JFrame {
     }
 
     private JPanel createProfileView(){
+        JPanel outerPanel = new JPanel(new GridBagLayout());
         JPanel panel = new JPanel(new GridLayout(4,2,10,10));
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
@@ -115,6 +116,11 @@ public class GUI extends JFrame {
 
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back");
+
+        nameField.setPreferredSize(new Dimension(150,20));
+        numberField.setPreferredSize(new Dimension(150,20));
+        saveButton.setPreferredSize(new Dimension(150,20));
+        backButton.setPreferredSize(new Dimension(150,20));
 
         backButton.addActionListener(e -> {
             cardLayout.show(centerPanel, "DEFAULT");
@@ -149,8 +155,9 @@ public class GUI extends JFrame {
         panel.add(numberField);
         panel.add(saveButton);
         panel.add(backButton);
+        outerPanel.add(panel);
 
-        return panel;
+        return outerPanel;
     }
 
     private void initLandingPage(){
