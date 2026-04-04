@@ -293,6 +293,8 @@ public class GUI extends JFrame {
         }
 
         //views/ view switching
+        //central area on the landing page will switch between panels using the buttons, using the cardLayout
+        //this whole class looks like glasgow central because of me but at least this is in one place
 
         JPanel defaultPanel = new JPanel(new BorderLayout());
         defaultPanel.add(new JLabel("Select a Chat to Start.", JLabel.CENTER), BorderLayout.CENTER);
