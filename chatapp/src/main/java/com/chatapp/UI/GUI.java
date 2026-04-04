@@ -116,6 +116,12 @@ public class GUI extends JFrame {
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back");
 
+        backButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "DEFAULT");
+            centerPanel.revalidate();
+            centerPanel.repaint();
+        });
+
         saveButton.addActionListener(e -> {
             String newName = nameField.getText().trim();
             String newPhoneNumber = numberField.getText().trim();
