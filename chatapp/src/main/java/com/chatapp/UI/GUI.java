@@ -18,6 +18,7 @@ public class GUI extends JFrame {
     private JButton createButton;
     private JPanel centerPanel;
     private CardLayout cardLayout;
+    private JLabel handleDisplay;
 
     public GUI(App app) {
         this.app = app;
@@ -141,6 +142,7 @@ public class GUI extends JFrame {
                 int newNumber =  Integer.parseInt(newPhoneNumber);
 
                 app.getProfile().setHandle(newName);
+                handleDisplay.setText(newName);
                 app.getProfile().setPhoneNumberID(newNumber);
 
                 JOptionPane.showMessageDialog(panel,"Profile Updated!");
@@ -174,6 +176,8 @@ public class GUI extends JFrame {
         JLabel title = new JLabel("Chat App");
         title.setHorizontalAlignment(JLabel.CENTER);
 
+        handleDisplay = new JLabel(app.getProfile().getHandle());
+
         JButton profileButton = new JButton("Profile");
         profileButton.addActionListener(e -> {
             System.out.println("Profile button pressed");
@@ -183,7 +187,9 @@ public class GUI extends JFrame {
         });
 
         topPanel.add(title, BorderLayout.CENTER);
+        topPanel.add(handleDisplay, BorderLayout.WEST);
         topPanel.add(profileButton, BorderLayout.EAST);
+
 
         mainFrame.add(topPanel, BorderLayout.NORTH);
 
