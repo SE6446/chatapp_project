@@ -19,6 +19,7 @@ public class GUI extends JFrame {
     private JPanel centerPanel;
     private CardLayout cardLayout;
     private JLabel handleDisplay;
+    private DefaultListModel<String> feedModel;
 
     public GUI(App app) {
         this.app = app;
@@ -198,6 +199,11 @@ public class GUI extends JFrame {
                 int newContactNumber =  Integer.parseInt(numberField.getText());
                 String newContactName =  nameField.getText();
                 app.addContact(newContactName, newContactNumber);
+
+                refreshFeed();
+                JOptionPane.showMessageDialog(panel,"Contact Added!");
+                cardLayout.show(centerPanel, "DEFAULT");
+
             }catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(panel,"Invalid phone number","Error",JOptionPane.ERROR_MESSAGE);
             }
@@ -211,6 +217,23 @@ public class GUI extends JFrame {
         outerPanel.add(panel);
 
         return outerPanel;
+    }
+
+    private void refreshFeed(){
+        feedModel.clear();
+
+        Stack<Chat> feed = (Stack<Chat>) app.getFeed().clone();
+
+        if (feed.isEmpty()){
+            feedModel.addElement("No chats yet");
+        } else{
+            int limit = Math.min(feed.size(), 3);
+
+            for (int i = 0; i < limit; i++){
+                Chat chat = feed.pop();
+                feedModel.addElement(chat.toString()); //this will need to change for GUI as chat feed displays "chat with: --personal handle--," for every contact
+            }
+        }
     }
 
     private void initLandingPage(){
@@ -245,7 +268,7 @@ public class GUI extends JFrame {
         mainFrame.add(topPanel, BorderLayout.NORTH);
 
         //feed
-        DefaultListModel<String> feedModel = new DefaultListModel<>();
+        feedModel = new DefaultListModel<>();
         JList<String> feedList = new JList<>(feedModel);
         JScrollPane feedScroll = new JScrollPane(feedList);
         feedScroll.setPreferredSize(new Dimension(400,0));
@@ -273,24 +296,7 @@ public class GUI extends JFrame {
         mainFrame.add(feedPanel, BorderLayout.WEST);
 
         //add chats to feed
-        Stack<Chat> feed = (Stack<Chat>) app.getFeed().clone();
-        
-
-        if (feed.isEmpty()) {
-            feedModel.addElement("No chats yet");
-        } else {
-            int limit;
-            if (feed.size() <= 3) {
-                limit = feed.size();
-            } else {
-                limit = 3;
-            }
-
-            for (int i = 0; i < limit; i++) {
-                Chat chat = feed.pop();
-                feedModel.addElement(chat.toString());
-            }
-        }
+        refreshFeed();
 
         //views/ view switching
         //central area on the landing page will switch between panels using the buttons, using the cardLayout
