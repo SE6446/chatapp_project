@@ -103,6 +103,50 @@ public class GUI extends JFrame {
         
     }
 
+    private JPanel createProfileView(){
+        JPanel panel = new JPanel(new GridLayout(4,2,10,10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameField = new JTextField(app.getProfile().getHandle());
+
+        JLabel numberLabel = new JLabel("Phone Number:");
+        numberField = new JTextField(String.valueOf(app.getProfile().getphoneNumber()));
+
+        JButton saveButton = new JButton("Save");
+        JButton backButton = new JButton("Back");
+
+        saveButton.addActionListener(e -> {
+            String newName = nameField.getText().trim();
+            String newPhoneNumber = numberField.getText().trim();
+
+            if (newName.isEmpty() || newPhoneNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try{
+                int newNumber =  Integer.parseInt(newPhoneNumber);
+
+                app.getProfile().setHandle(newName);
+                app.getProfile().setPhoneNumberID(newNumber);
+
+                JOptionPane.showMessageDialog(panel,"Profile Updated!");
+
+            }catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(panel,"Invalid phone number","Error",JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panel.add(nameLabel);
+        panel.add(nameField);
+        panel.add(numberLabel);
+        panel.add(numberField);
+        panel.add(saveButton);
+        panel.add(backButton);
+
+        return panel;
+    }
+
     private void initLandingPage(){
         cardLayout = new CardLayout();
         JFrame mainFrame = new JFrame("Chat App");
@@ -110,17 +154,19 @@ public class GUI extends JFrame {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setLocationRelativeTo(null);
-        mainFrame.setVisible(true);
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JPanel centerPanel = new JPanel(cardLayout);
+        centerPanel = new JPanel(cardLayout);
 
         JLabel title = new JLabel("Chat App");
         title.setHorizontalAlignment(JLabel.CENTER);
 
         JButton profileButton = new JButton("Profile");
         profileButton.addActionListener(e -> {
+            System.out.println("Profile button pressed");
             cardLayout.show(centerPanel, "PROFILE");
+            centerPanel.revalidate();
+            centerPanel.repaint();
         });
 
         topPanel.add(title, BorderLayout.CENTER);
@@ -163,8 +209,7 @@ public class GUI extends JFrame {
         JPanel chatPanel = new JPanel(new BorderLayout());
         chatPanel.add(new JLabel("Chat view.", JLabel.CENTER), BorderLayout.CENTER);
 
-        JPanel profilePanel = new JPanel(new BorderLayout());
-        profilePanel.add(new JLabel("Profile view.", JLabel.CENTER), BorderLayout.CENTER);
+        JPanel profilePanel = createProfileView();
 
         centerPanel.add(defaultPanel, "DEFAULT");
         centerPanel.add(chatPanel, "CHAT");
@@ -173,6 +218,8 @@ public class GUI extends JFrame {
         mainFrame.add(centerPanel, BorderLayout.CENTER);
 
         cardLayout.show(centerPanel, "DEFAULT");
+
+        mainFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
