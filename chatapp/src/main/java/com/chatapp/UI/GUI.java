@@ -162,6 +162,57 @@ public class GUI extends JFrame {
         return outerPanel;
     }
 
+    // its duplicate code idc im too tired to deal with it
+    private JPanel createNewContactView(){
+        JPanel outerPanel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridLayout(4,2,10,10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameField = new JTextField();
+
+        JLabel numberLabel = new JLabel("Phone Number:");
+        numberField = new JTextField();
+
+        JButton saveButton = new JButton("Save");
+        JButton backButton = new JButton("Back");
+
+        nameField.setPreferredSize(new Dimension(150,20));
+        numberField.setPreferredSize(new Dimension(150,20));
+        saveButton.setPreferredSize(new Dimension(150,20));
+        backButton.setPreferredSize(new Dimension(150,20));
+
+        backButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "DEFAULT");
+            centerPanel.revalidate();
+            centerPanel.repaint();
+        });
+
+        saveButton.addActionListener(e -> {
+            if(nameField.getText().isEmpty() || numberField.getText().isEmpty()){
+                JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try{
+                int newContactNumber =  Integer.parseInt(numberField.getText());
+                String newContactName =  nameField.getText();
+                app.addContact(newContactName, newContactNumber);
+            }catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(panel,"Invalid phone number","Error",JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panel.add(nameLabel);
+        panel.add(nameField);
+        panel.add(numberLabel);
+        panel.add(numberField);
+        panel.add(saveButton);
+        panel.add(backButton);
+        outerPanel.add(panel);
+
+        return outerPanel;
+    }
+
     private void initLandingPage(){
         cardLayout = new CardLayout();
         JFrame mainFrame = new JFrame("Chat App");
@@ -201,8 +252,17 @@ public class GUI extends JFrame {
 
         JPanel feedPanel = new JPanel(new BorderLayout());
         JPanel topFeedPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         JButton addContactButton = new JButton("Add Contact");
+        addContactButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "NEW CONTACT");
+            centerPanel.revalidate();
+            centerPanel.repaint();
+        });
+
         JButton addGroupChatButton = new JButton("New GroupChat");
+
+
         topFeedPanel.add(addContactButton);
         topFeedPanel.add(addGroupChatButton);
 
@@ -240,11 +300,17 @@ public class GUI extends JFrame {
         JPanel chatPanel = new JPanel(new BorderLayout());
         chatPanel.add(new JLabel("Chat view.", JLabel.CENTER), BorderLayout.CENTER);
 
+        JPanel newContactPanel = createNewContactView();
+
+        JPanel newGroupChatPanel;
+
         JPanel profilePanel = createProfileView();
 
         centerPanel.add(defaultPanel, "DEFAULT");
         centerPanel.add(chatPanel, "CHAT");
         centerPanel.add(profilePanel, "PROFILE");
+        centerPanel.add(newContactPanel, "NEW CONTACT");
+        //centerPanel.add(newGroupChatPanel, "NEW GROUP CHAT");
 
         mainFrame.add(centerPanel, BorderLayout.CENTER);
 
