@@ -13,19 +13,63 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-    
+    <profiles>
+        <profile>
+            <id>build-cli</id>
+            <build>
+                <finalName>app-cli</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals><goal>shade</goal></goals>
+                                <configuration>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>com.chatapp.UI.CLI</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
+        <profile>
+            <id>build-gui</id>
+            <build>
+                <finalName>app-gui</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals><goal>shade</goal></goals>
+                                <configuration>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>com.chatapp.UI.GUI</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <build>
+        
+    </build>
 
-
-    <dependencies>
-
-    
-
-        <dependency>
-            <groupId>io.fusionauth</groupId>
-            <artifactId>java-http</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-    </dependencies>
 </project>
