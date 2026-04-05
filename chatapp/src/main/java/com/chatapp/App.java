@@ -94,6 +94,10 @@ public class App {
         chats.put(contact.getUUID(), chat);
     }
 
+    public Collection<Contact> getAllContacts() {
+        return contacts.values();
+    }
+
     public Contact getContact(UUID id){
         return contacts.get(id);
     }

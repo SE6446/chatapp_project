@@ -178,9 +178,8 @@ public class GUI extends JFrame {
 
         JComboBox<String> contactDropDown = new JComboBox<>();
 
-        for (Chat chat: app.getFeed()) {
-            String name = chat.getDisplayName();
-            contactDropDown.addItem(name);
+        for (Contact c: app.getAllContacts()) {
+            contactDropDown.addItem(c.getHandle());
         }
 
         JButton addButton = new JButton("Add");
@@ -219,12 +218,10 @@ public class GUI extends JFrame {
             for (int i = 0; i < selectModel.size(); i++) {
                 String name = selectModel.get(i);
 
-                for (Chat chat: app.getFeed()) {
-                    for (Profile p: chat.getMembers()){
-                        if (p instanceof Contact && p.getHandle().equals(name)){
-                            members.add((Contact) p);
-                            break;
-                        }
+                for (Contact c: app.getAllContacts()) {
+                    if (c.getHandle().equals(name)) {
+                        members.add(c);
+                        break;
                     }
                 }
             }

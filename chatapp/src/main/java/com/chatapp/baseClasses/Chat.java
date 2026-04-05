@@ -20,7 +20,7 @@ public class Chat implements Serializable {
 
     public Chat(Collection<Contact> chatMembers) {
         members.addAll(chatMembers);
-        groupChat = false;
+        groupChat = true;
         isHost = true; // If instatiating a class like this, we can assume the instantiator is the host.
     }
 
