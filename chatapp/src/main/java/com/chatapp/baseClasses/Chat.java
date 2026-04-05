@@ -44,6 +44,24 @@ public class Chat implements Serializable {
         return chat;
     }
 
+    public String getOtherDisplayName(PersonalProfile self){
+        if (!groupChat){
+            for (Profile p: members){
+                if (!p.getUUID().equals(self.getUUID())){
+                    return p.getHandle();
+                }
+            }
+        }
+        StringBuilder stringBuilder = new StringBuilder("Group: ");
+        for (int i = 0; i < members.size(); i++) {
+            stringBuilder.append(members.get(i).getHandle());
+            if (i < members.size()-1){
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     public String getDisplayName(){ //GUI method
         if (!groupChat){
             if (!members.isEmpty()){

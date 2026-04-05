@@ -309,7 +309,7 @@ public class GUI extends JFrame {
 
             for (int i = 0; i < limit; i++){
                 Chat chat = feed.pop();
-                feedModel.addElement(chat.getDisplayName()); //this will need to change for GUI as chat feed displays "chat with: --personal handle--," for every contact
+                feedModel.addElement(chat.getOtherDisplayName(app.getProfile()));
             }
         }
     }
@@ -362,6 +362,10 @@ public class GUI extends JFrame {
         });
 
         JButton addGroupChatButton = new JButton("New GroupChat");
+        addGroupChatButton.addActionListener(e -> {
+            centerPanel.add(createNewGroupChatView(), "NEW GROUP CHAT");
+            cardLayout.show(centerPanel, "NEW GROUP CHAT");
+        });
 
 
         topFeedPanel.add(addContactButton);
