@@ -185,7 +185,7 @@ public class GUI extends JFrame {
 
         JButton addButton = new JButton("Add");
 
-        JPanel selectPanel = new JPanel;
+        JPanel selectPanel = new JPanel();
         selectPanel.add(contactDropDown);
         selectPanel.add(addButton);
 
@@ -234,6 +234,14 @@ public class GUI extends JFrame {
             refreshFeed();
             cardLayout.show(centerPanel, "DEFAULT");
         });
+
+        panel.add(top,BorderLayout.NORTH);
+        panel.add(selectPanel,BorderLayout.CENTER);
+        panel.add(selectScroll,BorderLayout.EAST);
+        panel.add(bottomPanel,BorderLayout.SOUTH);
+        outerPanel.add(panel);
+
+        return outerPanel;
     }
 
     // its duplicate code idc im too tired to deal with it
