@@ -102,16 +102,16 @@ public class GUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(app.getProfile().getHandle());
+        JTextField profileNameField = new JTextField(app.getProfile().getHandle());
 
         JLabel numberLabel = new JLabel("Phone Number:");
-        numberField = new JTextField(String.valueOf(app.getProfile().getphoneNumber()));
+        JTextField profileNumberField = new JTextField(String.valueOf(app.getProfile().getphoneNumber()));
 
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back");
 
-        nameField.setPreferredSize(new Dimension(150,20));
-        numberField.setPreferredSize(new Dimension(150,20));
+        profileNameField.setPreferredSize(new Dimension(150,20));
+        profileNumberField.setPreferredSize(new Dimension(150,20));
         saveButton.setPreferredSize(new Dimension(150,20));
         backButton.setPreferredSize(new Dimension(150,20));
 
@@ -122,8 +122,8 @@ public class GUI extends JFrame {
         });
 
         saveButton.addActionListener(e -> {
-            String newName = nameField.getText().trim();
-            String newPhoneNumber = numberField.getText().trim();
+            String newName = profileNameField.getText().trim();
+            String newPhoneNumber = profileNumberField.getText().trim();
 
             if (newName.isEmpty() || newPhoneNumber.isEmpty()) {
                 JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
@@ -143,9 +143,9 @@ public class GUI extends JFrame {
             }
         });
         panel.add(nameLabel);
-        panel.add(nameField);
+        panel.add(profileNameField);
         panel.add(numberLabel);
-        panel.add(numberField);
+        panel.add(profileNumberField);
         panel.add(saveButton);
         panel.add(backButton);
         outerPanel.add(panel);
@@ -237,16 +237,16 @@ public class GUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField();
+        JTextField contactNameField = new JTextField();
 
         JLabel numberLabel = new JLabel("Phone Number:");
-        numberField = new JTextField();
+        JTextField contactNumberField = new JTextField();
 
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back");
 
-        nameField.setPreferredSize(new Dimension(150,20));
-        numberField.setPreferredSize(new Dimension(150,20));
+        contactNameField.setPreferredSize(new Dimension(150,20));
+        contactNumberField.setPreferredSize(new Dimension(150,20));
         saveButton.setPreferredSize(new Dimension(150,20));
         backButton.setPreferredSize(new Dimension(150,20));
 
@@ -257,14 +257,14 @@ public class GUI extends JFrame {
         });
 
         saveButton.addActionListener(e -> {
-            if(nameField.getText().isEmpty() || numberField.getText().isEmpty()){
+            if(contactNameField.getText().isEmpty() || contactNumberField.getText().isEmpty()){
                 JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try{
-                int newContactNumber =  Integer.parseInt(numberField.getText());
-                String newContactName =  nameField.getText();
+                int newContactNumber = Integer.parseInt(contactNumberField.getText());
+                String newContactName = contactNameField.getText();
                 app.addContact(newContactName, newContactNumber);
 
                 refreshFeed();
@@ -276,9 +276,9 @@ public class GUI extends JFrame {
             }
         });
         panel.add(nameLabel);
-        panel.add(nameField);
+        panel.add(contactNameField);
         panel.add(numberLabel);
-        panel.add(numberField);
+        panel.add(contactNumberField);
         panel.add(saveButton);
         panel.add(backButton);
         outerPanel.add(panel);
@@ -298,7 +298,9 @@ public class GUI extends JFrame {
         int limit = Math.min(feed.size(), 3);
 
         for (int i = 0; i < limit; i++) {
-            feedModel.addElement(feed.pop());
+            Chat chat = feed.pop();
+            System.out.println("Feed shows: " + chat.getDisplayName());
+            feedModel.addElement(chat);
         }
     }
 
@@ -414,30 +416,29 @@ public class GUI extends JFrame {
         if (value == null) {
             label.setText("Unknown chat");
         } else {
-            label.setText(value.getOtherDisplayName(app.getProfile()));
+            label.setText(value.getDisplayName());
         }
 
+        label.setOpaque(true);
+
         if (isSelected) {
-            label.setOpaque(true);
             label.setBackground(list.getSelectionBackground());
             label.setForeground(list.getSelectionForeground());
         } else {
-            label.setOpaque(true);
             label.setBackground(list.getBackground());
-            label.setForeground(list.getForeground());
+        label.setForeground(list.getForeground());
         }
+        return label;
+        });
 
         feedList.addListSelectionListener(e -> {
         if (!e.getValueIsAdjusting()) {
-            Chat selectedChat = feedList.getSelectedValue();
+        Chat selectedChat = feedList.getSelectedValue();
 
         if (selectedChat != null) {
             openChatView(selectedChat);
             }
         }
-        });
-
-        return label;
         });
 
         JPanel feedPanel = new JPanel(new BorderLayout());
@@ -476,9 +477,6 @@ public class GUI extends JFrame {
         JPanel defaultPanel = new JPanel(new BorderLayout());
         defaultPanel.add(new JLabel("Select a Chat to Start.", JLabel.CENTER), BorderLayout.CENTER);
 
-        JPanel chatPanel = new JPanel(new BorderLayout());
-        chatPanel.add(new JLabel("Chat view.", JLabel.CENTER), BorderLayout.CENTER);
-
         JPanel newContactPanel = createNewContactView();
 
         JPanel newGroupChatPanel = createNewGroupChatView();
@@ -486,7 +484,6 @@ public class GUI extends JFrame {
         JPanel profilePanel = createProfileView();
 
         centerPanel.add(defaultPanel, "DEFAULT");
-        centerPanel.add(chatPanel, "CHAT");
         centerPanel.add(profilePanel, "PROFILE");
         centerPanel.add(newContactPanel, "NEW CONTACT");
         centerPanel.add(newGroupChatPanel, "NEW GROUP CHAT");

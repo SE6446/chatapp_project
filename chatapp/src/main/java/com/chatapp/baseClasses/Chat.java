@@ -46,19 +46,17 @@ public class Chat implements Serializable {
 
     public String getOtherDisplayName(PersonalProfile self){
         if (!groupChat){
-            for (Profile p: members){
-                if (!p.getUUID().equals(self.getUUID())){
-                    return p.getHandle();
-                }
+            if (!members.isEmpty()) {
+                return members.get(0).getHandle();
             }
         }
         StringBuilder stringBuilder = new StringBuilder("Group: ");
         for (int i = 0; i < members.size(); i++) {
             stringBuilder.append(members.get(i).getHandle());
-            if (i < members.size()-1){
+            if (i < members.size() - 1) {
                 stringBuilder.append(", ");
             }
-        }
+        } 
         return stringBuilder.toString();
     }
 
@@ -154,7 +152,7 @@ public class Chat implements Serializable {
         Iterator<Message> it = chat.descendingIterator();
         while (it.hasNext()) {
             Message message = it.next();
-            if (message.getuserUUID() == uuid) {
+            if (message.getuserUUID().equals(uuid)) {
                 return message;
             }
         }
