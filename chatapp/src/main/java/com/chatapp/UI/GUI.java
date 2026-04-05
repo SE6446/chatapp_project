@@ -383,7 +383,7 @@ public class GUI extends JFrame {
 
         JPanel newContactPanel = createNewContactView();
 
-        JPanel newGroupChatPanel;
+        JPanel newGroupChatPanel = createNewGroupChatView();
 
         JPanel profilePanel = createProfileView();
 
@@ -391,7 +391,7 @@ public class GUI extends JFrame {
         centerPanel.add(chatPanel, "CHAT");
         centerPanel.add(profilePanel, "PROFILE");
         centerPanel.add(newContactPanel, "NEW CONTACT");
-        //centerPanel.add(newGroupChatPanel, "NEW GROUP CHAT");
+        centerPanel.add(newGroupChatPanel, "NEW GROUP CHAT");
 
         mainFrame.add(centerPanel, BorderLayout.CENTER);
 
