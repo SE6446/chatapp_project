@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
+import java.util.ArrayList;
 
 
 public class GUI extends JFrame {
@@ -163,6 +164,90 @@ public class GUI extends JFrame {
         return outerPanel;
     }
 
+    private JPanel createNewGroupChatView(){
+        JPanel outerPanel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridLayout(4,2,10,10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel nameLabel = new JLabel("Group Name:");
+        JTextField groupNameField = new JTextField(15);
+
+        top.add(nameLabel);
+        top.add(groupNameField);
+
+        DefaultListModel<String> selectModel = new DefaultListModel<>();
+        JList<String> selectList = new JList<>(selectModel);
+        JScrollPane selectScroll = new JScrollPane(selectList);
+        selectScroll.setPreferredSize(new Dimension(200,150));
+
+        JComboBox<String> contactDropDown = new JComboBox<>();
+
+        for (Chat chat: app.getFeed()) {
+            String name = chat.getDisplayName();
+            contactDropDown.addItem(name);
+        }
+
+        JButton addButton = new JButton("Add");
+
+        JPanel selectPanel = new JPanel;
+        selectPanel.add(contactDropDown);
+        selectPanel.add(addButton);
+
+        addButton.addActionListener(e -> {
+            String selected = (String) contactDropDown.getSelectedItem();
+
+            if (selected != null && !selectModel.contains(selected)) {
+                selectModel.addElement(selected);
+            }
+        });
+
+        selectList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                selectedModel.removeElement(selectList.getSelectedValue());
+            }
+        });
+
+        JButton createButton = new JButton("Create Group");
+        JButton backButton = new JButton("Back");
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(createButton);
+        bottomPanel.add(backButton);
+
+        backButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "DEFAULT");
+        });
+
+        createButton.addActionListener(e -> {
+            String groupName = groupNameField.getText().trim();
+
+            if (groupName.isEmpty() || selectModel.isEmpty()) {
+                JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            ArrayList<Contact> members = new ArrayList<>();
+            for (int i = 0; i < selectModel.size(); i++) {
+                String name = selectModel.get(i);
+
+                for (Chat chat: app.getFeed()) {
+                    for (Contact c: chat.getMembers()){
+                        if (c.getHandle().equals(name)){
+                            members.add(c);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            app.createGroupChat(groupName, members);
+            JOptionPane.showMessageDialog(panel,"Group Created!");
+            refreshFeed();
+            cardLayout.show(centerPanel, "DEFAULT");
+        });
+    }
+
     // its duplicate code idc im too tired to deal with it
     private JPanel createNewContactView(){
         JPanel outerPanel = new JPanel(new GridBagLayout());
@@ -231,7 +316,7 @@ public class GUI extends JFrame {
 
             for (int i = 0; i < limit; i++){
                 Chat chat = feed.pop();
-                feedModel.addElement(chat.toString()); //this will need to change for GUI as chat feed displays "chat with: --personal handle--," for every contact
+                feedModel.addElement(chat.getDisplayName()); //this will need to change for GUI as chat feed displays "chat with: --personal handle--," for every contact
             }
         }
     }

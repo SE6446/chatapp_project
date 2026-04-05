@@ -44,6 +44,21 @@ public class Chat implements Serializable {
         return chat;
     }
 
+    public String getDisplayName(){ //GUI method
+        if (!groupChat){
+            if (!members.isEmpty()){
+                return members.get(0).getHandle();
+            }
+        }else {
+            StringBuilder stringBuilder = new StringBuilder("Group: ");
+            for (Contact c: members){
+                stringBuilder.append(c.getHandle()).append(", ");
+            }
+            return stringBuilder.toString();
+        }
+        return "";
+    }
+
     public void displayChat() {
         for (Message m : chat) {
             System.out.println(m.getSenderName()+ ": "+m.getText());
