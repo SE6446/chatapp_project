@@ -170,11 +170,6 @@ public class GUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel nameLabel = new JLabel("Group Name:");
-        JTextField groupNameField = new JTextField(15);
-
-        top.add(nameLabel);
-        top.add(groupNameField);
 
         DefaultListModel<String> selectModel = new DefaultListModel<>();
         JList<String> selectList = new JList<>(selectModel);
@@ -204,7 +199,7 @@ public class GUI extends JFrame {
 
         selectList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                selectedModel.removeElement(selectList.getSelectedValue());
+                selectModel.removeElement(selectList.getSelectedValue());
             }
         });
 
@@ -220,28 +215,21 @@ public class GUI extends JFrame {
         });
 
         createButton.addActionListener(e -> {
-            String groupName = groupNameField.getText().trim();
-
-            if (groupName.isEmpty() || selectModel.isEmpty()) {
-                JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
             ArrayList<Contact> members = new ArrayList<>();
             for (int i = 0; i < selectModel.size(); i++) {
                 String name = selectModel.get(i);
 
                 for (Chat chat: app.getFeed()) {
-                    for (Contact c: chat.getMembers()){
-                        if (c.getHandle().equals(name)){
-                            members.add(c);
+                    for (Profile p: chat.getMembers()){
+                        if (p instanceof Contact && p.getHandle().equals(name)){
+                            members.add((Contact) p);
                             break;
                         }
                     }
                 }
             }
 
-            app.createGroupChat(groupName, members);
+            app.createGroupChat(members);
             JOptionPane.showMessageDialog(panel,"Group Created!");
             refreshFeed();
             cardLayout.show(centerPanel, "DEFAULT");
