@@ -20,7 +20,7 @@ public class Chat implements Serializable {
 
     public Chat(Collection<Contact> chatMembers) {
         members.addAll(chatMembers);
-        groupChat = false;
+        groupChat = true;
         isHost = true; // If instatiating a class like this, we can assume the instantiator is the host.
     }
 
@@ -42,6 +42,37 @@ public class Chat implements Serializable {
 
     public LinkedList<Message> getChat() {
         return chat;
+    }
+
+    public String getOtherDisplayName(PersonalProfile self){
+        if (!groupChat){
+            if (!members.isEmpty()) {
+                return members.get(0).getHandle();
+            }
+        }
+        StringBuilder stringBuilder = new StringBuilder("Group: ");
+        for (int i = 0; i < members.size(); i++) {
+            stringBuilder.append(members.get(i).getHandle());
+            if (i < members.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        } 
+        return stringBuilder.toString();
+    }
+
+    public String getDisplayName(){ //GUI method
+        if (!groupChat){
+            if (!members.isEmpty()){
+                return members.get(0).getHandle();
+            }
+        }else {
+            StringBuilder stringBuilder = new StringBuilder("Group: ");
+            for (Contact c: members){
+                stringBuilder.append(c.getHandle()).append(", ");
+            }
+            return stringBuilder.toString();
+        }
+        return "";
     }
 
     public void displayChat() {
@@ -87,7 +118,7 @@ public class Chat implements Serializable {
         }
     }
 
-    public Message sendMessage(Message message){ // .addFirst so that the most recent message will always appear at screen bottom
+    public Message sendMessage(Message message){
         chat.addLast(message);
         return message;
     }
@@ -121,7 +152,7 @@ public class Chat implements Serializable {
         Iterator<Message> it = chat.descendingIterator();
         while (it.hasNext()) {
             Message message = it.next();
-            if (message.getuserUUID() == uuid) {
+            if (message.getuserUUID().equals(uuid)) {
                 return message;
             }
         }

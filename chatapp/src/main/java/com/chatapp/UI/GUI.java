@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
+import java.util.ArrayList;
 
 
 public class GUI extends JFrame {
@@ -19,18 +20,10 @@ public class GUI extends JFrame {
     private JPanel centerPanel;
     private CardLayout cardLayout;
     private JLabel handleDisplay;
-
-    public GUI(App app) {
-        this.app = app;
-
-        setTitle("Chat App");
-        setSize(350, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        initComponents();
-        setVisible(true);
-    }
+    private DefaultListModel<Chat> feedModel;
+    private JTextArea chatArea;
+    private JTextField messageField;
+    private Chat currentChat;
 
     public GUI(App app, boolean needsProfileCreation) {
         this.app = app;
@@ -40,12 +33,13 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        initComponents();
         if (needsProfileCreation) {
-            setVisible(true);
+            initComponents();
         } else {
             initLandingPage();
         }
+
+        setVisible(true);
     }
 
     private void initComponents() {
@@ -91,10 +85,8 @@ public class GUI extends JFrame {
             int number = Integer.parseInt(numberText);
             app.initAccount(name, number);
 
-            JOptionPane.showMessageDialog(this, "profile created successfuly!");
-
-            dispose();
-            SwingUtilities.invokeLater(() -> initLandingPage());
+            JOptionPane.showMessageDialog(this, "Profile created successfully!");
+            initLandingPage();
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "enter valid phone number."
@@ -110,16 +102,16 @@ public class GUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(app.getProfile().getHandle());
+        JTextField profileNameField = new JTextField(app.getProfile().getHandle());
 
         JLabel numberLabel = new JLabel("Phone Number:");
-        numberField = new JTextField(String.valueOf(app.getProfile().getphoneNumber()));
+        JTextField profileNumberField = new JTextField(String.valueOf(app.getProfile().getphoneNumber()));
 
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back");
 
-        nameField.setPreferredSize(new Dimension(150,20));
-        numberField.setPreferredSize(new Dimension(150,20));
+        profileNameField.setPreferredSize(new Dimension(150,20));
+        profileNumberField.setPreferredSize(new Dimension(150,20));
         saveButton.setPreferredSize(new Dimension(150,20));
         backButton.setPreferredSize(new Dimension(150,20));
 
@@ -130,33 +122,109 @@ public class GUI extends JFrame {
         });
 
         saveButton.addActionListener(e -> {
-            String newName = nameField.getText().trim();
-            String newPhoneNumber = numberField.getText().trim();
+            String newName = profileNameField.getText().trim();
+            String newPhoneNumber = profileNumberField.getText().trim();
 
             if (newName.isEmpty() || newPhoneNumber.isEmpty()) {
                 JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            try{
-                int newNumber =  Integer.parseInt(newPhoneNumber);
+            try {
+                int newNumber = Integer.parseInt(newPhoneNumber);
 
-                app.getProfile().setHandle(newName);
-                handleDisplay.setText(newName);
-                app.getProfile().setPhoneNumberID(newNumber);
+                app.editProfile(newName, newNumber);
+                handleDisplay.setText(app.getProfile().getHandle());
 
-                JOptionPane.showMessageDialog(panel,"Profile Updated!");
+                JOptionPane.showMessageDialog(panel, "Profile Updated!");
 
-            }catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(panel,"Invalid phone number","Error",JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(panel, "Invalid phone number", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         panel.add(nameLabel);
-        panel.add(nameField);
+        panel.add(profileNameField);
         panel.add(numberLabel);
-        panel.add(numberField);
+        panel.add(profileNumberField);
         panel.add(saveButton);
         panel.add(backButton);
+        outerPanel.add(panel);
+
+        return outerPanel;
+    }
+
+    private JPanel createNewGroupChatView(){
+        JPanel outerPanel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new BorderLayout(10,10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        DefaultListModel<String> selectModel = new DefaultListModel<>();
+        JList<String> selectList = new JList<>(selectModel);
+        JScrollPane selectScroll = new JScrollPane(selectList);
+        selectScroll.setPreferredSize(new Dimension(200,150));
+
+        JComboBox<String> contactDropDown = new JComboBox<>();
+
+        for (Contact c: app.getAllContacts()) {
+            contactDropDown.addItem(c.getHandle());
+        }
+
+        JButton addButton = new JButton("Add");
+
+        JPanel selectPanel = new JPanel();
+        selectPanel.add(contactDropDown);
+        selectPanel.add(addButton);
+
+        addButton.addActionListener(e -> {
+            String selected = (String) contactDropDown.getSelectedItem();
+
+            if (selected != null && !selectModel.contains(selected)) {
+                selectModel.addElement(selected);
+            }
+        });
+
+        selectList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                selectModel.removeElement(selectList.getSelectedValue());
+            }
+        });
+
+        JButton createButton = new JButton("Create Group");
+        JButton backButton = new JButton("Back");
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(createButton);
+        bottomPanel.add(backButton);
+
+        backButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "DEFAULT");
+        });
+
+        createButton.addActionListener(e -> {
+            ArrayList<Contact> members = new ArrayList<>();
+            for (int i = 0; i < selectModel.size(); i++) {
+                String name = selectModel.get(i);
+
+                for (Contact c: app.getAllContacts()) {
+                    if (c.getHandle().equals(name)) {
+                        members.add(c);
+                        break;
+                    }
+                }
+            }
+
+            app.createGroupChat(members);
+            JOptionPane.showMessageDialog(panel,"Group Created!");
+            refreshFeed();
+            cardLayout.show(centerPanel, "DEFAULT");
+        });
+
+        panel.add(top,BorderLayout.NORTH);
+        panel.add(selectPanel,BorderLayout.CENTER);
+        panel.add(selectScroll,BorderLayout.EAST);
+        panel.add(bottomPanel,BorderLayout.SOUTH);
         outerPanel.add(panel);
 
         return outerPanel;
@@ -169,16 +237,16 @@ public class GUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField();
+        JTextField contactNameField = new JTextField();
 
         JLabel numberLabel = new JLabel("Phone Number:");
-        numberField = new JTextField();
+        JTextField contactNumberField = new JTextField();
 
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back");
 
-        nameField.setPreferredSize(new Dimension(150,20));
-        numberField.setPreferredSize(new Dimension(150,20));
+        contactNameField.setPreferredSize(new Dimension(150,20));
+        contactNumberField.setPreferredSize(new Dimension(150,20));
         saveButton.setPreferredSize(new Dimension(150,20));
         backButton.setPreferredSize(new Dimension(150,20));
 
@@ -189,23 +257,28 @@ public class GUI extends JFrame {
         });
 
         saveButton.addActionListener(e -> {
-            if(nameField.getText().isEmpty() || numberField.getText().isEmpty()){
+            if(contactNameField.getText().isEmpty() || contactNumberField.getText().isEmpty()){
                 JOptionPane.showMessageDialog(panel,"Fields cannot be empty","Error",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try{
-                int newContactNumber =  Integer.parseInt(numberField.getText());
-                String newContactName =  nameField.getText();
+                int newContactNumber = Integer.parseInt(contactNumberField.getText());
+                String newContactName = contactNameField.getText();
                 app.addContact(newContactName, newContactNumber);
+
+                refreshFeed();
+                JOptionPane.showMessageDialog(panel,"Contact Added!");
+                cardLayout.show(centerPanel, "DEFAULT");
+
             }catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(panel,"Invalid phone number","Error",JOptionPane.ERROR_MESSAGE);
             }
         });
         panel.add(nameLabel);
-        panel.add(nameField);
+        panel.add(contactNameField);
         panel.add(numberLabel);
-        panel.add(numberField);
+        panel.add(contactNumberField);
         panel.add(saveButton);
         panel.add(backButton);
         outerPanel.add(panel);
@@ -213,13 +286,100 @@ public class GUI extends JFrame {
         return outerPanel;
     }
 
+    private void refreshFeed() {
+        feedModel.clear();
+
+        Stack<Chat> feed = (Stack<Chat>) app.getFeed().clone();
+
+        if (feed.isEmpty()) {
+            return;
+        }
+
+        int limit = Math.min(feed.size(), 3);
+
+        for (int i = 0; i < limit; i++) {
+            Chat chat = feed.pop();
+            System.out.println("Feed shows: " + chat.getDisplayName());
+            feedModel.addElement(chat);
+        }
+    }
+
+    private void openChatView(Chat chat) {
+        currentChat = chat;
+
+        JPanel chatPanel = new JPanel(new BorderLayout());
+
+        JLabel chatTitle = new JLabel(chat.getOtherDisplayName(app.getProfile()), JLabel.CENTER);
+
+        chatArea = new JTextArea();
+        chatArea.setEditable(false);
+        refreshChatArea();
+
+        JScrollPane chatScroll = new JScrollPane(chatArea);
+
+        messageField = new JTextField();
+        JButton sendButton = new JButton("Send");
+        JButton backButton = new JButton("Back");
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(backButton, BorderLayout.WEST);
+        bottomPanel.add(messageField, BorderLayout.CENTER);
+        bottomPanel.add(sendButton, BorderLayout.EAST);
+
+        backButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "DEFAULT");
+            centerPanel.revalidate();
+            centerPanel.repaint();
+        });
+
+        sendButton.addActionListener(e -> sendCurrentMessage());
+        messageField.addActionListener(e -> sendCurrentMessage());
+
+        chatPanel.add(chatTitle, BorderLayout.NORTH);
+        chatPanel.add(chatScroll, BorderLayout.CENTER);
+        chatPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+        centerPanel.add(chatPanel, "CHAT");
+        cardLayout.show(centerPanel, "CHAT");
+        centerPanel.revalidate();
+        centerPanel.repaint();
+    }
+
+        
+    private void sendCurrentMessage() {
+        if (currentChat == null) {
+            return;
+        }
+
+        String text = messageField.getText().trim();
+
+        if (text.isEmpty()) {
+            return;
+        }
+
+        Message message = new Message(text, app.getProfile());
+        currentChat.sendMessage(message);
+        messageField.setText("");
+
+        refreshChatArea();
+        refreshFeed();
+    }
+
+    private void refreshChatArea() {
+        if (currentChat == null || chatArea == null) {
+            return;
+        }
+
+        chatArea.setText(currentChat.toString());
+    }
+
     private void initLandingPage(){
         cardLayout = new CardLayout();
-        JFrame mainFrame = new JFrame("Chat App");
-        mainFrame.setSize(1280,720);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.setLocationRelativeTo(null);
+        getContentPane().removeAll();
+        setTitle("Chat App");
+        setSize(1280, 720);
+        setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
         JPanel topPanel = new JPanel(new BorderLayout());
         centerPanel = new JPanel(cardLayout);
@@ -242,13 +402,44 @@ public class GUI extends JFrame {
         topPanel.add(profileButton, BorderLayout.EAST);
 
 
-        mainFrame.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         //feed
-        DefaultListModel<String> feedModel = new DefaultListModel<>();
-        JList<String> feedList = new JList<>(feedModel);
+        feedModel = new DefaultListModel<>();
+        JList<Chat> feedList = new JList<>(feedModel);
         JScrollPane feedScroll = new JScrollPane(feedList);
         feedScroll.setPreferredSize(new Dimension(400,0));
+
+        feedList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+        JLabel label = new JLabel();
+
+        if (value == null) {
+            label.setText("Unknown chat");
+        } else {
+            label.setText(value.getDisplayName());
+        }
+
+        label.setOpaque(true);
+
+        if (isSelected) {
+            label.setBackground(list.getSelectionBackground());
+            label.setForeground(list.getSelectionForeground());
+        } else {
+            label.setBackground(list.getBackground());
+        label.setForeground(list.getForeground());
+        }
+        return label;
+        });
+
+        feedList.addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+        Chat selectedChat = feedList.getSelectedValue();
+
+        if (selectedChat != null) {
+            openChatView(selectedChat);
+            }
+        }
+        });
 
         JPanel feedPanel = new JPanel(new BorderLayout());
         JPanel topFeedPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -261,6 +452,10 @@ public class GUI extends JFrame {
         });
 
         JButton addGroupChatButton = new JButton("New GroupChat");
+        addGroupChatButton.addActionListener(e -> {
+            centerPanel.add(createNewGroupChatView(), "NEW GROUP CHAT");
+            cardLayout.show(centerPanel, "NEW GROUP CHAT");
+        });
 
 
         topFeedPanel.add(addContactButton);
@@ -270,27 +465,10 @@ public class GUI extends JFrame {
         feedPanel.add(feedScroll, BorderLayout.CENTER);
         feedPanel.setPreferredSize(new Dimension(400,0));
 
-        mainFrame.add(feedPanel, BorderLayout.WEST);
+        add(feedPanel, BorderLayout.WEST);
 
         //add chats to feed
-        Stack<Chat> feed = (Stack<Chat>) app.getFeed().clone();
-        
-
-        if (feed.isEmpty()) {
-            feedModel.addElement("No chats yet");
-        } else {
-            int limit;
-            if (feed.size() <= 3) {
-                limit = feed.size();
-            } else {
-                limit = 3;
-            }
-
-            for (int i = 0; i < limit; i++) {
-                Chat chat = feed.pop();
-                feedModel.addElement(chat.toString());
-            }
-        }
+        refreshFeed();
 
         //views/ view switching
         //central area on the landing page will switch between panels using the buttons, using the cardLayout
@@ -299,26 +477,22 @@ public class GUI extends JFrame {
         JPanel defaultPanel = new JPanel(new BorderLayout());
         defaultPanel.add(new JLabel("Select a Chat to Start.", JLabel.CENTER), BorderLayout.CENTER);
 
-        JPanel chatPanel = new JPanel(new BorderLayout());
-        chatPanel.add(new JLabel("Chat view.", JLabel.CENTER), BorderLayout.CENTER);
-
         JPanel newContactPanel = createNewContactView();
 
-        JPanel newGroupChatPanel;
+        JPanel newGroupChatPanel = createNewGroupChatView();
 
         JPanel profilePanel = createProfileView();
 
         centerPanel.add(defaultPanel, "DEFAULT");
-        centerPanel.add(chatPanel, "CHAT");
         centerPanel.add(profilePanel, "PROFILE");
         centerPanel.add(newContactPanel, "NEW CONTACT");
-        //centerPanel.add(newGroupChatPanel, "NEW GROUP CHAT");
+        centerPanel.add(newGroupChatPanel, "NEW GROUP CHAT");
 
-        mainFrame.add(centerPanel, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
 
         cardLayout.show(centerPanel, "DEFAULT");
 
-        mainFrame.setVisible(true);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
